@@ -8,10 +8,10 @@ import java.util.UUID;
 
 @Getter
 public class FineAmountUpdatedEvent   {
-    private UUID eventId;
-    private LocalDateTime occurredOn;
-    private int amount;
-    private UUID memberId;
+    private final UUID eventId;
+    private final LocalDateTime occurredOn;
+    private final int amount;
+    private final UUID memberId;
 
     public FineAmountUpdatedEvent(int amount, UUID memberId) {
         this.eventId = UUID.randomUUID();
