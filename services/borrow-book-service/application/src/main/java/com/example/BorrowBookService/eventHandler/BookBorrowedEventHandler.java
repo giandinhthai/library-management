@@ -20,18 +20,14 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BookBorrowedEventHandler {
     private final BookRepository bookRepository;
-//    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void onBooksBorrowedEvent(BooksBorrowedEvent booksBorrowedEvent) {
         System.out.println("Book borrowed event received");
         List<Book> books = bookRepository.findAllByIdOrThrow(booksBorrowedEvent.getBookIds());
 
         for (Book book : books) {
             book.getBorrowed();
-            bookRepository.save(book);
         }
-
-
-
+        bookRepository.saveAll(books);
     }
 }

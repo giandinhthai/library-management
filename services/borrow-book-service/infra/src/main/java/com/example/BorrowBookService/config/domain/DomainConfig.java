@@ -1,18 +1,18 @@
 package com.example.BorrowBookService.config.domain;
 
-import com.example.BorrowBookService.service.BookService;
-import com.example.BorrowBookService.service.BorrowService;
-import org.springframework.context.annotation.Bean;
+//import com.example.BorrowBookService.service.BookService;
+//import com.example.BorrowBookService.service.BorrowService;
+//import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DomainConfig {
-    @Bean
-    public BookService bookService() {
-        return new BookService();
-    }
-    @Bean
-    public BorrowService borrowItemService() {
-        return new BorrowService();
-    }
+//    @Bean
+//    public BookService bookService() {
+//        return new BookService();
+//    }
+//    @Bean
+//    public BorrowService borrowItemService() {
+//        return new BorrowService();
+//    }
 }

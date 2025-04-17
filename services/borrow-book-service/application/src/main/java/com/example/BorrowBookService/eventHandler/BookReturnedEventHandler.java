@@ -18,8 +18,8 @@ public class BookReturnedEventHandler {
     private final BookRepository bookRepository;
 //    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @EventListener
-    public void onBooksBorrowedEvent(BooksReturnedEvent booksReturnedEvent) {
-        System.out.println("Book borrowed event received");
+    public void onBooksReturnedEvent(BooksReturnedEvent booksReturnedEvent) {
+        System.out.println("Book returned event received");
         List<Book> books = bookRepository.findAllByIdOrThrow(booksReturnedEvent.getBookIds());
 
         for (Book book : books) {
