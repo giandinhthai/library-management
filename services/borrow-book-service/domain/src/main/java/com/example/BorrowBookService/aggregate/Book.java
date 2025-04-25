@@ -1,16 +1,18 @@
 package com.example.BorrowBookService.aggregate;
 
-import com.example.BorrowBookService.exception.UnvalidBookStateException;
-import com.example.BorrowBookService.exception.UnvalidBorrowRequestException;
+import com.example.BorrowBookService.event.BookAvailableQuantityIncreasedEvent;
+import com.example.BorrowBookService.exception.InvalidBookStateException;
+import com.example.BorrowBookService.exception.InvalidBorrowRequestException;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "books")
 @Getter
-public class Book {
+public class Book extends AbstractAggregateRoot<Book> {
     @Id
     @Column(name = "book_id")
     private UUID bookId;
@@ -33,6 +35,8 @@ public class Book {
     @Column(name = "available_quantity")
     private int availableQuantity;
 
+    @Column(name = "reservation_quantity")
+    private int reservationQuantity;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BookStatus status;
@@ -41,7 +45,7 @@ public class Book {
     protected Book() {
     }
 
-    private Book(UUID bookId, String title, String author, String isbn, int price, int quantity) {
+    private Book(UUID bookId, String title, String author, String isbn, int price, int quantity,int reservationQuantity) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
@@ -50,10 +54,11 @@ public class Book {
         this.quantity = quantity;
         this.availableQuantity = quantity;
         this.status = BookStatus.ACTIVE;
+        this.reservationQuantity = reservationQuantity;
     }
     public void addQuantity(int quantity) {
         if (status != BookStatus.ACTIVE) {
-            throw new UnvalidBookStateException("Book is not active in the system");
+            throw new InvalidBookStateException("Book is not active in the system");
         }
         this.quantity += quantity;
         this.availableQuantity += quantity;
@@ -73,7 +78,7 @@ public class Book {
             throw new IllegalArgumentException("Quantity must be positive");
         }
 
-        return new Book(UUID.randomUUID(), title, author, isbn, price, quantity);
+        return new Book(UUID.randomUUID(), title, author, isbn, price, quantity, 0);
     }
     public boolean isAvailable() {
         return availableQuantity > 0 && status == BookStatus.ACTIVE;
@@ -83,21 +88,36 @@ public class Book {
     }
 
     public void getBorrowed() {
-        validateBorrowRequest();
+        validateAvailableRequest();
         availableQuantity--;
     }
+    public void completeReservation() {
+        if (reservationQuantity <= 0) {
+            throw new InvalidBookStateException("No reserved books to complete");
+        }
+        reservationQuantity--;
+    }
+    public void approveReserved() {
+        validateAvailableRequest();
+        availableQuantity--;
+        reservationQuantity++;
+    }
+
     public void isReturned() {
-        if (availableQuantity >= quantity) {
-            throw new UnvalidBookStateException("Cannot return more books than total quantity");
+        if (availableQuantity + reservationQuantity >= quantity) {
+            throw new InvalidBookStateException("Cannot return more books than total quantity");
         }
         availableQuantity++;
+        registerEvent(new BookAvailableQuantityIncreasedEvent(bookId));
+
     }
-    private void validateBorrowRequest() {
+    private void validateAvailableRequest() {
         if (!hasAvailableCopies()) {
-            throw new UnvalidBorrowRequestException("No available copies of this book");
+            throw new InvalidBorrowRequestException("No available copies of this book");
         }
         if (status != BookStatus.ACTIVE) {
-            throw new UnvalidBorrowRequestException("Book is not active in the system");
+            throw new InvalidBorrowRequestException("Book is not active in the system");
         }
     }
+
 }

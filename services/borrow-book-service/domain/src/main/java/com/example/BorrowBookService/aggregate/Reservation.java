@@ -1,11 +1,13 @@
 package com.example.BorrowBookService.aggregate;
 
+import com.example.BorrowBookService.event.ReservationExpiredEvent;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+
 @Entity
 @Table(name = "reservations")
 @Getter
@@ -35,13 +37,15 @@ public class Reservation {
     public static Reservation create(UUID bookId, Member member) {
         return new Reservation(UUID.randomUUID(), bookId, member);
     }
-    private void markAsReady(){
+    public void markAsReady(){
         if (status != ReservationStatus.PENDING) {
             throw new IllegalStateException("Can only mark a pending reservation as ready");
         }
         this.status = ReservationStatus.READY_FOR_PICKUP;
-        //TODO: send notification to member
-        this.expiresAt = LocalDateTime.now().plusDays(RESERVATION_EXPIRATION_DAYS);
+        
+        // Set expiration to the end of the day (23:59:59) after 2 days
+        LocalDateTime twoDaysLater = LocalDateTime.now().plusDays(RESERVATION_EXPIRATION_DAYS);
+        this.expiresAt = twoDaysLater.toLocalDate().atTime(23, 59, 59);
     }
     public void cancel(){
         if (status == ReservationStatus.COMPLETED || status == ReservationStatus.CANCELLED) {
@@ -60,12 +64,11 @@ public class Reservation {
                 expiresAt != null &&
                 LocalDateTime.now().isAfter(expiresAt);
     }
-    public Reservation checkAndExpireIfNeeded() {
+    public boolean markAsExpiredIfNeeded() {
         if (isExpired()) {
             this.status = ReservationStatus.EXPIRED;
+            return true;
         }
-        return this;
+        return false;
     }
-
-
 }

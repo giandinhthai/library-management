@@ -27,12 +27,12 @@ public class AuthUser {
     }
     
     // Factory method for creating a new user
-    public static AuthUser create(String email, String hashedPassword) {
+    public static AuthUser create(String email, String password, Role role, PasswordEncoder passwordEncoder) {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email cannot be empty");
         }
         
-        if (hashedPassword == null || hashedPassword.isBlank()) {
+        if (password == null || password.isBlank()) {
             throw new IllegalArgumentException("Password cannot be empty");
         }
         
@@ -40,8 +40,18 @@ public class AuthUser {
             throw new IllegalArgumentException("Invalid email format");
         }
         
+        if (role == null) {
+            throw new IllegalArgumentException("Role cannot be null");
+        }
+        
+        if (passwordEncoder == null) {
+            throw new IllegalArgumentException("Password encoder cannot be null");
+        }
+        
         UUID userId = UUID.randomUUID();
+        String hashedPassword = passwordEncoder.encode(password);
         AuthUser user = new AuthUser(userId, email, hashedPassword);
+        user.addRole(role);
         user.addDomainEvent(new UserCreatedEvent(userId, email));
         return user;
     }
@@ -65,7 +75,7 @@ public class AuthUser {
         return matches;
     }
     
-    public void assignRole(Role role) {
+    public void addRole(Role role) {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
         }
@@ -148,7 +158,7 @@ public class AuthUser {
     public void clearDomainEvents() {
         domainEvents.clear();
     }
-    public void validateRefreshToken(String tokenToValidate) {
+    public void validateAndRevokeRefreshToken(String tokenToValidate) {
         // Find the token
         RefreshToken existingToken = refreshTokens.stream()
                 .filter(token -> token.getToken().equals(tokenToValidate))
@@ -163,6 +173,8 @@ public class AuthUser {
         if (existingToken.isRevoked()) {
             throw new InvalidTokenException("Refresh token has been revoked");
         }
+        existingToken.revoke();
+
     }
 
 }

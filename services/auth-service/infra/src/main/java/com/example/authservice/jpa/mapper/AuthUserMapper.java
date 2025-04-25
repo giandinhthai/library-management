@@ -12,7 +12,7 @@ public class AuthUserMapper {
         AuthUser user = AuthUser.reconstitute(entity.getUserId(), entity.getEmail(), entity.getHashedPassword());
 
         // Add roles and tokens
-        entity.getRoles().forEach(user::assignRole);
+        entity.getRoles().forEach(user::addRole);
         entity.getRefreshTokens().forEach(rt -> user.addRefreshToken(rt.toDomain()));
 
         // Set active status

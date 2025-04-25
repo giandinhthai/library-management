@@ -1,9 +1,12 @@
 package com.example.authservice.aggregate;
 
+import lombok.Getter;
+
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 public class RefreshToken {
     private final String token;
     private final Instant issuedAt;
@@ -21,16 +24,8 @@ public class RefreshToken {
         this.expiresAt = expiresAt;
     }
 
-    public String getToken() {
-        return token;
-    }
-
     public boolean isExpired() {
         return Instant.now().isAfter(expiresAt);
-    }
-
-    public boolean isRevoked() {
-        return revoked;
     }
 
     public void revoke() {
@@ -50,11 +45,4 @@ public class RefreshToken {
         return Objects.hash(token);
     }
 
-    public Instant getIssuedAt() {
-        return issuedAt;
-    }
-
-    public Instant getExpiresAt() {
-        return expiresAt;
-    }
 }

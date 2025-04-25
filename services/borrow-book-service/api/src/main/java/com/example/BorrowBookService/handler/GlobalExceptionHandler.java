@@ -3,8 +3,8 @@ package com.example.BorrowBookService.handler;
 
 import com.example.BorrowBookService.exception.NotFoundException;
 import com.example.BorrowBookService.exception.UnexpectedBorrowStateException;
-import com.example.BorrowBookService.exception.UnvalidBookStateException;
-import com.example.BorrowBookService.exception.UnvalidBorrowRequestException;
+import com.example.BorrowBookService.exception.InvalidBookStateException;
+import com.example.BorrowBookService.exception.InvalidBorrowRequestException;
 import com.example.buildingblocks.shared.api.DTO.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,16 +49,16 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error("Unexpected borrow state error",
                         new ApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
     }
-    @ExceptionHandler(UnvalidBookStateException.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnvalidBookStateException(UnvalidBookStateException ex) {
+    @ExceptionHandler(InvalidBookStateException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnvalidBookStateException(InvalidBookStateException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ApiResponse.error("Unvalid book state error",
                         new ApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
     }
 
-    @ExceptionHandler(UnvalidBorrowRequestException.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnvalidBorrowRequestException(UnvalidBorrowRequestException ex) {
+    @ExceptionHandler(InvalidBorrowRequestException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnvalidBorrowRequestException(InvalidBorrowRequestException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ApiResponse.error("Unvalid borrow request error",

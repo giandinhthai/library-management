@@ -1,10 +1,10 @@
 package com.example.authservice.controller.v1;
 
 import com.example.authservice.dto.AuthTokenResult;
-import com.example.authservice.usecase.Login;
-import com.example.authservice.usecase.RefreshToken;
-import com.example.authservice.usecase.Register;
-import com.example.authservice.usecase.ValidateToken;
+import com.example.authservice.usecase.command.Login;
+import com.example.authservice.usecase.command.GetAccessToken;
+import com.example.authservice.usecase.command.Register;
+import com.example.authservice.usecase.query.ValidateToken;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import com.example.buildingblocks.shared.api.DTO.ApiResponse;
 import jakarta.validation.Valid;
@@ -25,29 +25,32 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthTokenResult>> login(@RequestBody Login.Command command) {
+    public ResponseEntity<ApiResponse<AuthTokenResult>> login(@RequestBody Login command) {
         AuthTokenResult result = mediator.send(command);
         return ResponseEntity.ok(ApiResponse.success(result, "Login successful"));
 
     }
+
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody Register.Command command) {
+    public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody Register command) {
 
         mediator.send(command);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(null, "User registered successfully"));
 
     }
+
     @PostMapping("/refresh-token")
-    public ResponseEntity<ApiResponse<AuthTokenResult>> refreshToken(@Valid @RequestBody RefreshToken.Command command) {
+    public ResponseEntity<ApiResponse<AuthTokenResult>> refreshToken(@Valid @RequestBody GetAccessToken command) {
 
         AuthTokenResult result = mediator.send(command);
         return ResponseEntity.ok(ApiResponse.success(result, "Token refreshed successfully"));
 
 
     }
+
     @PostMapping("/validate-token")
-    public ResponseEntity<ApiResponse<Boolean>> validateToken(@RequestBody ValidateToken.Command command) {
+    public ResponseEntity<ApiResponse<Boolean>> validateToken(@RequestBody ValidateToken command) {
 
         Boolean isValid = mediator.send(command);
         return ResponseEntity.ok(ApiResponse.success(isValid, "Token validation completed"));

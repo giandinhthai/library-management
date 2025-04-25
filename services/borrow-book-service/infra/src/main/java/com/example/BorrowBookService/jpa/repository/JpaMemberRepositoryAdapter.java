@@ -7,7 +7,7 @@ import com.example.BorrowBookService.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -25,4 +25,16 @@ public class JpaMemberRepositoryAdapter implements MemberRepository {
     public Member save(Member member) {
         return jpaMemberRepository.save(member);
     }
+
+    @Override
+    public List<Member> saveAll(List<Member> members) {
+        return jpaMemberRepository.saveAll(members);
+    }
+
+    @Override
+    public List<Member> findAllWithReadyReservations() {
+        return jpaMemberRepository.findAllWithReadyReservations();
+    }
+
+
 }

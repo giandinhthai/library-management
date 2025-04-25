@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":services:borrow-book-service:application"))
     implementation(project(":services:borrow-book-service:domain"))
     implementation(project(":services:borrow-book-service:infra"))
+    implementation("org.springframework.retry:spring-retry:2.0.11")
 
     implementation(project(":building-blocks:cqrs"))
     implementation(project(":building-blocks:shared-kernel"))
