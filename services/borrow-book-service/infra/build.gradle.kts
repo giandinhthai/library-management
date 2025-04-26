@@ -21,9 +21,13 @@ dependencies {
     implementation("org.mapstruct:mapstruct:1.5.5.Final")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-
-
+    compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
+
+    implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")
 
 
 }
