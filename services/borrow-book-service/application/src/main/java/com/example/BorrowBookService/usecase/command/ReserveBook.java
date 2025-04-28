@@ -43,7 +43,7 @@ class ReserveBookHandler extends BaseBookHandler implements RequestHandler<Reser
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('LIBRARIAN') or" +
+    @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN') or" +
             " hasRole('MEMBER') and authentication.principal.equals(#request.memberId)")
     public List<ReserveResult> handle(@Param("request") ReserveBook request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

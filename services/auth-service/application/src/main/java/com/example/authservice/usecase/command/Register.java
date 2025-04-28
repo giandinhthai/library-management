@@ -18,6 +18,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -44,9 +45,12 @@ public class Register implements Command<Void> {
 class RegisterHandler implements RequestHandler<Register, Void> {
     private final AuthUserRepository authUserRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final List<Role> ACCEPT_REGISTER_ROLE=List.of(Role.MEMBER,Role.LIBRARIAN);
     @Override
     public Void handle(Register command) {
+        if (!ACCEPT_REGISTER_ROLE.contains(command.getRole())){
+            throw new IllegalArgumentException("cannot register this role");
+        }
         if (!command.getPassword().equals(command.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
         }

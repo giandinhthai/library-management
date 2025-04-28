@@ -13,6 +13,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.4.4")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.4.4")
     implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.4")
     implementation(project(":services:borrow-book-service:application"))
     implementation(project(":services:borrow-book-service:domain"))
     implementation(project(":services:borrow-book-service:infra"))

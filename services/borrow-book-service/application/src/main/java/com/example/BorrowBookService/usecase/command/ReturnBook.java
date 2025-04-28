@@ -40,7 +40,7 @@ class ReturnBookHandler extends BaseBookHandler implements RequestHandler<Return
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('LIBRARIAN')")
+    @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN')")
     public Set<BorrowResult> handle(ReturnBook request) {
         checkForDuplicateBooks(request.getListBookId(), InvalidReturnRequestException::new);
         var member = memberRepository.findByIdOrThrow(request.getMemberId());

@@ -36,7 +36,7 @@ class CompleteReservationHandler implements RequestHandler<CompleteReservation, 
     private final BorrowMapper borrowMapper;
 
     @Override
-    @PreAuthorize("hasAnyRole('LIBRARIAN')")
+    @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN')")
     public BorrowResult handle(CompleteReservation request) {
         Member member = memberRepository.findByIdOrThrow(request.getMemberId());
         Reservation reservation = reservationRepository.getReservationByIdOrThrow(request.getReservationId());

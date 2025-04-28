@@ -42,7 +42,7 @@ class BorrowBookHandler extends BaseBookHandler implements RequestHandler<Borrow
     private final BorrowMapper borrowMapper;
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('LIBRARIAN')")
+    @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN')")
     public BorrowResult handle(BorrowBook request) {
         Member member = memberRepository.findByIdOrThrow(request.getMemberId());
         validateBooksCanBorrow(request.getListBookId());

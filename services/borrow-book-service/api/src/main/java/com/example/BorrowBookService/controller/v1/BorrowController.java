@@ -14,6 +14,8 @@ import com.example.buildingblocks.cqrs.mediator.Mediator;
 import com.example.buildingblocks.shared.api.DTO.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,11 +69,12 @@ public class BorrowController {
     }
 
     @GetMapping("/members/{memberId}/borrows")
-    public ResponseEntity<ApiResponse<List<BorrowResult>>> getMemberBorrows(
+    public ResponseEntity<ApiResponse<Page<BorrowResult>>> getMemberBorrows(
             @PathVariable UUID memberId,
-            @RequestParam(required = false) BorrowStatus status) {
-        var query = new GetMemberBorrows(memberId, status);
-        List<BorrowResult> results = mediator.send(query);
+            @RequestParam(required = false) BorrowStatus status,
+            Pageable pageable) {
+        var query = new GetMemberBorrows(memberId, status, pageable);
+        Page<BorrowResult> results = mediator.send(query);
         return ResponseEntity.ok(ApiResponse.success(results));
     }
 }

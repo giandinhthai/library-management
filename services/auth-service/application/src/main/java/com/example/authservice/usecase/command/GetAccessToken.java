@@ -40,7 +40,7 @@ class GetAccessTokenHandler implements RequestHandler<GetAccessToken, AuthTokenR
         var refreshToken = user.generateRefreshToken(tokenGenerator);
         // Generate new access token
         String accessToken = jwtAccessTokenGenerator.generate(user);
-
+        authUserRepository.save(user);
         // Return the tokens
         return new AuthTokenResult(accessToken, refreshToken.getToken());
     }
