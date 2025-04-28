@@ -6,6 +6,8 @@ import com.example.BorrowBookService.exception.NotFoundException;
 import com.example.BorrowBookService.jpa.repository.jpa.JpaReservationRepository;
 import com.example.BorrowBookService.repository.ReservationReadOnlyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -42,5 +44,10 @@ public class ReservationReadOnlyRepositoryAdapter implements ReservationReadOnly
     @Override
     public List<Reservation> getAllReservation(UUID memberId, ReservationStatus status) {
         return jpaReservationRepository.findByMemberIdAndStatus(memberId, status);
+    }
+
+    @Override
+    public Page<Reservation> getReservationByBook(UUID bookId, ReservationStatus status, Pageable pageable) {
+        return jpaReservationRepository.getReservationByBook(bookId, status, pageable);
     }
 }

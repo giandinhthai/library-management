@@ -2,6 +2,8 @@ package com.example.BorrowBookService.jpa.repository.jpa;
 
 import com.example.BorrowBookService.aggregate.Reservation;
 import com.example.BorrowBookService.aggregate.ReservationStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -51,4 +53,11 @@ public interface JpaReservationRepository extends JpaRepository<Reservation, UUI
             ORDER BY r.reservedAt DESC
             """)
     List<Reservation> findByMemberIdAndStatus(@Param("memberId") UUID memberId, @Param("status") ReservationStatus status);
+    @Query(value = """
+            SELECT r
+            FROM Reservation r
+            WHERE r.bookId = :bookId
+            AND (:status IS NULL OR r.status = :status)
+            """)
+    Page<Reservation> getReservationByBook(@Param("bookId") UUID bookId, @Param("status") ReservationStatus status, Pageable pageable);
 }

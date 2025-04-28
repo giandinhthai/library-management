@@ -2,6 +2,8 @@ package com.example.BorrowBookService.repository;
 
 import com.example.BorrowBookService.aggregate.Reservation;
 import com.example.BorrowBookService.aggregate.ReservationStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +19,5 @@ public interface ReservationReadOnlyRepository {
 
     List<Reservation> getAllReservation(UUID memberId, ReservationStatus status);
 
-    default List<Reservation> getAllReservation(UUID memberId) {
-        return getAllReservation(memberId, null);
-    }
+    Page<Reservation> getReservationByBook(UUID bookId, ReservationStatus status, Pageable pageable);
 }

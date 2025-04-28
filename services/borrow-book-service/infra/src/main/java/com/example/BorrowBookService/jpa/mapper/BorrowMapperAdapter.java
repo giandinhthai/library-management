@@ -1,5 +1,6 @@
 package com.example.BorrowBookService.jpa.mapper;
 
+import com.example.BorrowBookService.DTO.borrow.BorrowItemOnBook;
 import com.example.BorrowBookService.DTO.borrow.BorrowItemResult;
 import com.example.BorrowBookService.DTO.borrow.BorrowResult;
 import com.example.BorrowBookService.DTO.borrow.mapper.BorrowMapper;
@@ -30,7 +31,11 @@ public interface BorrowMapperAdapter extends BorrowMapper {
     BorrowItemResult toResult(BorrowItem borrowItem);
 
     List<BorrowItemResult> toItemResultList(List<BorrowItem> borrowItems);
-
+    @Mapping(source = "borrow.dueDate", target = "dueDate")
+    @Mapping(source="borrow.member.memberId",target = "memberId")
+    @Mapping(source="borrow.borrowedAt",target = "borrowAt")
+    @Mapping(source="borrow.borrowId",target="borrowId")
+    BorrowItemOnBook toResultOnBook(BorrowItem borrowItem);
     @Named("mapStatus")
     default String mapStatus(com.example.BorrowBookService.aggregate.BorrowStatus status) {
         return status.name();

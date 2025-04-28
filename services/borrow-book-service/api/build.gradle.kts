@@ -21,6 +21,7 @@ dependencies {
 
     implementation(project(":building-blocks:cqrs"))
     implementation(project(":building-blocks:shared-kernel"))
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
 
     compileOnly("org.projectlombok:lombok:1.18.38")
     annotationProcessor("org.projectlombok:lombok:1.18.38")

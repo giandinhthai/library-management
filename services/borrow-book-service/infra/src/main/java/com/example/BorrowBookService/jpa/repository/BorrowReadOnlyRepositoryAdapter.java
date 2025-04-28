@@ -16,7 +16,7 @@ import java.util.UUID;
 public class BorrowReadOnlyRepositoryAdapter implements BorrowReadOnlyRepository {
     private final JpaBorrowRepository jpaBorrowRepository;
     @Override
-    public Page<Borrow> getBorrow(UUID memberId, BorrowStatus status, Pageable pageable) {
-        return jpaBorrowRepository.getBorrowBy(memberId,status, pageable);
+    public Page<Borrow> getBorrowOnMember(UUID memberId, BorrowStatus status, Pageable pageable) {
+        return jpaBorrowRepository.getBorrowOnMember(memberId,status, pageable);
     }
 }

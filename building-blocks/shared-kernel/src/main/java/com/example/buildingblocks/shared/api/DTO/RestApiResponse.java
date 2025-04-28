@@ -5,42 +5,42 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiResponse<T> {
+public class RestApiResponse<T> {
     private boolean success;
     private String message;
     private T data;
     private LocalDateTime timestamp;
     private ErrorDetails error;
 
-    private ApiResponse() {
+    private RestApiResponse() {
         this.timestamp = LocalDateTime.now();
     }
 
-    public static <T> ApiResponse<T> success(T data) {
-        ApiResponse<T> response = new ApiResponse<>();
+    public static <T> RestApiResponse<T> success(T data) {
+        RestApiResponse<T> response = new RestApiResponse<>();
         response.success = true;
         response.data = data;
         response.message = "Operation completed successfully";
         return response;
     }
 
-    public static <T> ApiResponse<T> success(T data, String message) {
-        ApiResponse<T> response = new ApiResponse<>();
+    public static <T> RestApiResponse<T> success(T data, String message) {
+        RestApiResponse<T> response = new RestApiResponse<>();
         response.success = true;
         response.data = data;
         response.message = message;
         return response;
     }
 
-    public static <T> ApiResponse<T> error(String message) {
-        ApiResponse<T> response = new ApiResponse<>();
+    public static <T> RestApiResponse<T> error(String message) {
+        RestApiResponse<T> response = new RestApiResponse<>();
         response.success = false;
         response.message = message;
         return response;
     }
 
-    public static <T> ApiResponse<T> error(String message, ErrorDetails errorDetails) {
-        ApiResponse<T> response = new ApiResponse<>();
+    public static <T> RestApiResponse<T> error(String message, ErrorDetails errorDetails) {
+        RestApiResponse<T> response = new RestApiResponse<>();
         response.success = false;
         response.message = message;
         response.error = errorDetails;

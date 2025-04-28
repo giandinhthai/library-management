@@ -20,5 +20,5 @@ public interface JpaBorrowRepository extends JpaRepository<Borrow, UUID> {
             WHERE b.member.memberId = :memberId
             AND (:status IS NULL OR b.status = :status)
             """)
-    Page<Borrow> getBorrowBy(@Param("memberId") UUID memberId, @Param("status") BorrowStatus status, Pageable pageable);
+    Page<Borrow> getBorrowOnMember(@Param("memberId") UUID memberId, @Param("status") BorrowStatus status, Pageable pageable);
 }
