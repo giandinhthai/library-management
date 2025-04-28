@@ -6,6 +6,7 @@ import com.example.buildingblocks.cqrs.request.Command;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ class BatchExpireReservationsHandler implements RequestHandler<BatchExpireReserv
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public Integer handle(BatchExpireReservations command) {
         int totalExpired = 0;
         log.info("Starting reservation expiration check");

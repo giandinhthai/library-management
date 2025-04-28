@@ -8,6 +8,8 @@ import com.example.BorrowBookService.exception.InvalidBorrowRequestException;
 import com.example.buildingblocks.shared.api.DTO.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -79,5 +81,12 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("An unexpected error occurred",
                         new ApiResponse.ErrorDetails("SERVER_ERROR", ex.getMessage())));
+    }
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBadCredentialsException(AuthenticationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Bad credentials",
+                        new ApiResponse.ErrorDetails("BAD_CREDENTIALS", ex.getMessage())));
     }
 }

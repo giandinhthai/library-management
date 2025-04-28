@@ -17,6 +17,7 @@ dependencies {
 
     implementation(project(":services:borrow-book-service:domain"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.4")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")
 
 
 

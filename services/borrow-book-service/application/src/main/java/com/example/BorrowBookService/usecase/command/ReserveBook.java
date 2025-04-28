@@ -6,6 +6,7 @@ import com.example.BorrowBookService.aggregate.Member;
 import com.example.BorrowBookService.exception.InvalidReservationRequestException;
 import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.repository.MemberRepository;
+import com.example.BorrowBookService.service.security.SecurityService;
 import com.example.BorrowBookService.usecase.BaseBookHandler;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Request;
@@ -13,7 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,8 +39,15 @@ class ReserveBookHandler extends BaseBookHandler implements RequestHandler<Reser
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;
     private final ReserveMapper reserveMapper;
+    private SecurityService securityService;
+
     @Override
-    public List<ReserveResult> handle(ReserveBook request) {
+    @Transactional
+    @PreAuthorize("hasRole('LIBRARIAN') or" +
+            " hasRole('MEMBER') and authentication.principal.equals(#request.memberId)")
+    public List<ReserveResult> handle(@Param("request") ReserveBook request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getPrincipal().equals(request.getMemberId()));
         validateBookCanReserve(request.getListBookId());
         Member member = memberRepository.findByIdOrThrow(request.getMemberId());
         Set<UUID> bookIds = new HashSet<>(request.getListBookId());

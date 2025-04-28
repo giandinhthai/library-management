@@ -11,7 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,11 +29,14 @@ public class GetMemberReservations implements Query<List<ReserveResult>> {
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 class GetMemberReservationsHandler implements RequestHandler<GetMemberReservations, List<ReserveResult>> {
     private final ReservationReadOnlyRepository reservationReadOnlyRepository;
     private final ReserveMapper reserveMapper;
 
     @Override
+    @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN') or " +
+            "hasRole('MEMBER') and authentication.principal.equals(#query.memberId)")
     public List<ReserveResult> handle(GetMemberReservations query) {
         List<Reservation> reservations = reservationReadOnlyRepository.getAllReservation(
             query.getMemberId(), 

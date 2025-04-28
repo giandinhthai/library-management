@@ -4,11 +4,14 @@ import com.example.BorrowBookService.service.security.SecurityService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class SecurityUtils implements SecurityService {
     
-    public String getCurrentUserId() {
-        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public UUID getCurrentUserId() {
+        return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getPrincipal()
+                .toString());
     }
 
     public boolean hasRole(String role) {

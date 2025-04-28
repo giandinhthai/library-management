@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +40,7 @@ class ReturnBookHandler extends BaseBookHandler implements RequestHandler<Return
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('LIBRARIAN')")
     public Set<BorrowResult> handle(ReturnBook request) {
         checkForDuplicateBooks(request.getListBookId(), InvalidReturnRequestException::new);
         var member = memberRepository.findByIdOrThrow(request.getMemberId());

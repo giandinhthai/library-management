@@ -13,6 +13,7 @@ import com.example.BorrowBookService.repository.ReservationReadOnlyRepository;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Command;
 import lombok.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -35,6 +36,7 @@ class CompleteReservationHandler implements RequestHandler<CompleteReservation, 
     private final BorrowMapper borrowMapper;
 
     @Override
+    @PreAuthorize("hasAnyRole('LIBRARIAN')")
     public BorrowResult handle(CompleteReservation request) {
         Member member = memberRepository.findByIdOrThrow(request.getMemberId());
         Reservation reservation = reservationRepository.getReservationByIdOrThrow(request.getReservationId());

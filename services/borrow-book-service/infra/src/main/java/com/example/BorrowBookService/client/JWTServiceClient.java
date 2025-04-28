@@ -42,7 +42,7 @@ public class JWTServiceClient implements AuthServiceClient {
             return false;
         } catch (Exception e) {
             log.error("Error validating token with auth service", e);
-            throw new RuntimeException("Failed to validate token with auth service", e);
+            return false;
         }
     }
 }

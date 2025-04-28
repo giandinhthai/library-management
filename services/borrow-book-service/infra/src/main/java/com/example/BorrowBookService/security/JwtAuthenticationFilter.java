@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -27,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         String token = extractToken(request);
         if (token != null) {
             try {
@@ -36,20 +38,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     JwtClaims claims = jwtDecoder.decodeWithoutVerify(token);
                     String userId = claims.getSub();
                     String role = claims.getAuth();
-                    
+
                     List<SimpleGrantedAuthority> authorities = List.of(
-                        new SimpleGrantedAuthority("ROLE_" + role)
+                            new SimpleGrantedAuthority("ROLE_" + role)
                     );
-                    
-                    UsernamePasswordAuthenticationToken authentication = 
-                        new UsernamePasswordAuthenticationToken(userId, null, authorities);
+                    var uuid = UUID.fromString(userId);
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(uuid, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    logger.warn("JWT authentication failed: invalid token");
+                    throw new BadCredentialsException("Invalid authentication token");
                 }
             } catch (Exception e) {
                 log.error("Could not authenticate user", e);
+                throw new BadCredentialsException("Member authentication failed, invalid token", e);
             }
         }
-        
+
         filterChain.doFilter(request, response);
     }
 
