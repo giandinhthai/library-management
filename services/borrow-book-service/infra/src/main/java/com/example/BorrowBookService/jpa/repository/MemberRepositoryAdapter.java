@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Repository
 @AllArgsConstructor
-public class JpaMemberRepositoryAdapter implements MemberRepository {
+public class MemberRepositoryAdapter implements MemberRepository {
     private final JpaMemberRepository jpaMemberRepository;
 
     @Override

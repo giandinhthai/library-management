@@ -18,15 +18,6 @@ public class Book extends AbstractAggregateRoot<Book> {
     private UUID bookId;
 
     @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
-    private String author;
-
-    @Column(name = "isbn", unique = true)
-    private String isbn;
-
-    @Column(nullable = false)
     private int price;
 
     @Column(nullable = false)
@@ -35,7 +26,7 @@ public class Book extends AbstractAggregateRoot<Book> {
     @Column(name = "available_quantity")
     private int availableQuantity;
 
-    @Column(name = "reservation_quantity")
+    @Column(name = "reservation_quantity", nullable = false)
     private int reservationQuantity;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -45,11 +36,8 @@ public class Book extends AbstractAggregateRoot<Book> {
     protected Book() {
     }
 
-    private Book(UUID bookId, String title, String author, String isbn, int price, int quantity,int reservationQuantity) {
+    private Book(UUID bookId, int price, int quantity,int reservationQuantity) {
         this.bookId = bookId;
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
         this.price = price;
         this.quantity = quantity;
         this.availableQuantity = quantity;
@@ -64,13 +52,7 @@ public class Book extends AbstractAggregateRoot<Book> {
         this.availableQuantity += quantity;
     }
 
-    public static Book create(String title, String author, String isbn, int price, int quantity) {
-        if (title == null || title.isBlank()) {
-            throw new IllegalArgumentException("Title cannot be empty");
-        }
-        if (author == null || author.isBlank()) {
-            throw new IllegalArgumentException("Author cannot be empty");
-        }
+    public static Book create( int price, int quantity) {
         if (price <= 0) {
             throw new IllegalArgumentException("Price must be positive");
         }
@@ -78,10 +60,7 @@ public class Book extends AbstractAggregateRoot<Book> {
             throw new IllegalArgumentException("Quantity must be positive");
         }
 
-        return new Book(UUID.randomUUID(), title, author, isbn, price, quantity, 0);
-    }
-    public boolean isAvailable() {
-        return availableQuantity > 0 && status == BookStatus.ACTIVE;
+        return new Book(UUID.randomUUID(), price, quantity, 0);
     }
     public boolean hasAvailableCopies() {
         return availableQuantity > 0;
@@ -92,6 +71,9 @@ public class Book extends AbstractAggregateRoot<Book> {
         availableQuantity--;
     }
     public void completeReservation() {
+        if (status != BookStatus.ACTIVE) {
+            throw new InvalidBookStateException("Book is not active in the system");
+        }
         if (reservationQuantity <= 0) {
             throw new InvalidBookStateException("No reserved books to complete");
         }

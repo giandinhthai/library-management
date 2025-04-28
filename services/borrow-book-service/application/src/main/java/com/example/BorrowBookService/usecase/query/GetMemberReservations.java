@@ -11,13 +11,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -37,13 +37,13 @@ class GetMemberReservationsHandler implements RequestHandler<GetMemberReservatio
     @Override
     @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN') or " +
             "hasRole('MEMBER') and authentication.principal.equals(#query.memberId)")
-    public List<ReserveResult> handle(GetMemberReservations query) {
+    public List<ReserveResult> handle(@Param("query") GetMemberReservations query) {
         List<Reservation> reservations = reservationReadOnlyRepository.getAllReservation(
-            query.getMemberId(), 
-            query.getStatus()
+                query.getMemberId(),
+                query.getStatus()
         );
         return reservations.stream()
                 .map(reserveMapper::toResult)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

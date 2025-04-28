@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
-public class JpaBookRepositoryAdapter implements BookRepository {
+public class BookRepositoryAdapter implements BookRepository {
 
     private final JpaBookRepository bookJpaRepository;
 
