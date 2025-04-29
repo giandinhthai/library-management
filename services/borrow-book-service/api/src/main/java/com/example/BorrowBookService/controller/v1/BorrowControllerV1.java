@@ -33,9 +33,9 @@ import java.util.UUID;
  * Provides endpoints for members to borrow, return, reserve, and complete reservations for books.
  */
 @RestController
-@RequestMapping("/api/v1/borrows")
+@RequestMapping(value = "/api/borrows", headers = "X-API-VERSION=1")
 @AllArgsConstructor
-public class BorrowController {
+public class BorrowControllerV1 {
 
     private final Mediator mediator;
 

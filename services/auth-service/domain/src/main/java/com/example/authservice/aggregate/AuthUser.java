@@ -5,25 +5,26 @@ import com.example.authservice.event.UserLoggedInEvent;
 import com.example.authservice.exceptions.InvalidTokenException;
 import com.example.authservice.service.TokenGenerator;
 import com.example.buildingblocks.security.encoder.PasswordEncoder;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class AuthUser {
+public class AuthUser extends AbstractAggregateRoot<AuthUser> {
     private final UUID userId;
     private String email;
     private String hashedPassword;
     private final Set<Role> roles = new HashSet<>();
     private final Set<RefreshToken> refreshTokens = new HashSet<>();
     private boolean active = true;
-    private final Set<Object> domainEvents = new HashSet<>();
 
     private AuthUser(UUID userId, String email, String hashedPassword) {
         this.userId = userId;
         this.email = email;
         this.hashedPassword = hashedPassword;
+        registerEvent(new UserCreatedEvent(userId, email));
     }
     
     // Factory method for creating a new user
@@ -52,7 +53,6 @@ public class AuthUser {
         String hashedPassword = passwordEncoder.encode(password);
         AuthUser user = new AuthUser(userId, email, hashedPassword);
         user.addRole(role);
-        user.addDomainEvent(new UserCreatedEvent(userId, email));
         return user;
     }
     public static AuthUser reconstitute(UUID userId, String email, String hashedPassword) {
@@ -69,9 +69,6 @@ public class AuthUser {
         }
         
         boolean matches = encoder.matches(rawPassword, this.hashedPassword);
-        if (matches) {
-            addDomainEvent(new UserLoggedInEvent(userId, email));
-        }
         return matches;
     }
     
@@ -147,17 +144,7 @@ public class AuthUser {
         return refreshToken;
     }
     
-    private void addDomainEvent(Object event) {
-        domainEvents.add(event);
-    }
-    
-    public Set<Object> getDomainEvents() {
-        return Collections.unmodifiableSet(domainEvents);
-    }
-    
-    public void clearDomainEvents() {
-        domainEvents.clear();
-    }
+
     public void validateAndRevokeRefreshToken(String tokenToValidate) {
         // Find the token
         RefreshToken existingToken = refreshTokens.stream()
