@@ -1,8 +1,6 @@
-package com.example.BorrowBookService.eventHandler;
+package com.example.BorrowBookService.eventHandler.domain_events;
 
 import com.example.BorrowBookService.aggregate.Book;
-import com.example.BorrowBookService.aggregate.Member;
-import com.example.BorrowBookService.aggregate.Reservation;
 import com.example.BorrowBookService.event.MemberReturnBooksEvent;
 import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.repository.MemberRepository;
@@ -20,14 +18,12 @@ import java.util.*;
 @Slf4j
 public class MemberReturnBooksEventHandler {
     private final BookRepository bookRepository;
-    private final MemberRepository memberRepository;
-    private final ReservationReadOnlyRepository reservationReadOnlyRepository;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void updateBookStatusOnMemberReturnedEvent(MemberReturnBooksEvent memberReturnBooksEvent) {
         log.info("Book returned event received");
-        List<UUID> bookIds = memberReturnBooksEvent.getBookIds().stream().toList();
-        List<Book> books = bookRepository.findAllByIdOrThrow(bookIds);
+        var books = bookRepository.findAllByIdOrThrow(
+                List.copyOf(memberReturnBooksEvent.getBookIds()));
 
         for (Book book : books) {
             book.isReturned();

@@ -14,10 +14,13 @@ dependencies {
     implementation("org.springframework.retry:spring-retry:2.0.11")
     implementation(project(":building-blocks:cqrs"))
     implementation(project(":building-blocks:shared-kernel"))
+    implementation(project(":building-blocks:event-bus"))
 
     implementation(project(":services:borrow-book-service:domain"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.4")
     implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")
+
+    implementation("org.springframework.kafka:spring-kafka:3.3.5")
 
 
 

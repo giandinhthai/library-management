@@ -43,12 +43,12 @@ public class Member extends AbstractAggregateRoot<Member> {
     public static final int BRONZE_MAX_REPUTATION = 40;
     public static final int SILVER_MAX_REPUTATION = 80;
 
-    private Member(UUID uuid, String email) {
+    private Member(UUID uuid, String email, int reputation, MembershipTier tier, int outstandingFines) {
         this.memberId = uuid;
         this.email = email;
-        this.reputation = INITIAL_REPUTATION;
-        this.tier = MembershipTier.BRONZE;
-        this.outstandingFines = 0;
+        this.reputation = reputation;
+        this.tier = tier;
+        this.outstandingFines = outstandingFines;
     }
 
     protected Member() {
@@ -56,8 +56,8 @@ public class Member extends AbstractAggregateRoot<Member> {
     }
 
     // Domain methods
-    public static Member create(String email) {
-        return new Member(UUID.randomUUID(), email);
+    public static Member create(UUID uuid, String email) {
+        return new Member(uuid, email, INITIAL_REPUTATION, MembershipTier.BRONZE, 0);
     }
 
 

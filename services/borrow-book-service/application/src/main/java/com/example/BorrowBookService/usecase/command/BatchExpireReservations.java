@@ -23,21 +23,17 @@ class BatchExpireReservationsHandler implements RequestHandler<BatchExpireReserv
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN')")
     public Integer handle(BatchExpireReservations command) {
         int totalExpired = 0;
-        log.info("Starting reservation expiration check");
 
         var members = memberRepository.findAllWithReadyReservations();
 
         for (var member : members) {
             int expiredCount = member.checkAndExpireReservations();
-            if (expiredCount > 0) {
-                memberRepository.save(member);
-                totalExpired += expiredCount;
-            }
+            totalExpired += expiredCount;
         }
-        log.info("Completed reservation expiration check. Expired {} reservations", totalExpired);
+        memberRepository.saveAll(members);
         return totalExpired;
     }
 }

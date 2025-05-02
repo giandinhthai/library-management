@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.eventHandler;
+package com.example.BorrowBookService.eventHandler.domain_events;
 
 import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.event.ReservationReadyEvent;
@@ -26,12 +26,13 @@ public class ReservationReadyEventHandler {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void notifyMemberOnReservationReadyEvent(ReservationReadyEvent reservationReadyEvent) {
-        System.out.println("notify member that book with id " + reservationReadyEvent.getReservation().getBookId() + " is ready");
+        log.info("notify member that book with id " + reservationReadyEvent.getReservation().getBookId() + " is ready");
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void updateBookStatusOnReservationReadyEvent(ReservationReadyEvent reservationReadyEvent) {
         Book book = bookRepository.findByIdOrThrow(reservationReadyEvent.getReservation().getBookId());
         book.approveReserved();
+        bookRepository.save(book);
     }
 }

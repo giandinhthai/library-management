@@ -6,7 +6,9 @@ import com.example.authservice.exceptions.EmailAlreadyExistsException;
 import com.example.authservice.repositories.AuthUserRepository;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Command;
+import com.example.buildingblocks.eventbus.kafkaService.EventPublisher;
 import com.example.buildingblocks.security.encoder.PasswordEncoder;
+import com.example.buildingblocks.shared.intergation_event.UserRegisteredIntegrationEvent;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +18,10 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +51,9 @@ class RegisterHandler implements RequestHandler<Register, Void> {
     private final AuthUserRepository authUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final List<Role> ACCEPT_REGISTER_ROLE=List.of(Role.MEMBER,Role.LIBRARIAN);
+    private final EventPublisher eventPublisher;
     @Override
+    @Transactional
     public Void handle(Register command) {
         if (!ACCEPT_REGISTER_ROLE.contains(command.getRole())){
             throw new IllegalArgumentException("cannot register this role");
@@ -67,6 +74,12 @@ class RegisterHandler implements RequestHandler<Register, Void> {
         );
 
         authUserRepository.save(user);
+        UserRegisteredIntegrationEvent integrationEvent = new UserRegisteredIntegrationEvent(
+                user.getUserId(),
+                user.getEmail(),
+                user.getRole().toString(),
+                Instant.now());
+        eventPublisher.publish(integrationEvent);
         return null;
     }
 }

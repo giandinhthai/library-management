@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.eventHandler;
+package com.example.BorrowBookService.eventHandler.domain_events;
 
 import com.example.BorrowBookService.aggregate.Member;
 import com.example.BorrowBookService.aggregate.Reservation;
@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-
-import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor

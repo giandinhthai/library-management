@@ -1,6 +1,5 @@
 package com.example.BorrowBookService.event;
 
-import com.example.buildingblocks.shared.domain.event.DomainEvent;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

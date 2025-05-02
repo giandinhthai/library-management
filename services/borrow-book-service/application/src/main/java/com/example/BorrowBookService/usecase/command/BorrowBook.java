@@ -7,7 +7,6 @@ import com.example.BorrowBookService.aggregate.Member;
 import com.example.BorrowBookService.exception.InvalidBorrowRequestException;
 import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.repository.MemberRepository;
-import com.example.BorrowBookService.service.security.SecurityService;
 import com.example.BorrowBookService.usecase.BaseBookHandler;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Command;
@@ -16,8 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +37,7 @@ class BorrowBookHandler extends BaseBookHandler implements RequestHandler<Borrow
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;
     private final BorrowMapper borrowMapper;
+
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN')")
@@ -53,6 +51,7 @@ class BorrowBookHandler extends BaseBookHandler implements RequestHandler<Borrow
         memberRepository.save(member);
         return borrowMapper.toResult(borrowResult);
     }
+
     private void validateBooksCanBorrow(List<UUID> bookUUIDs) {
         checkForDuplicateBooks(bookUUIDs, InvalidBorrowRequestException::new);
         validateBooksAvailability(bookUUIDs);

@@ -6,7 +6,6 @@ import com.example.BorrowBookService.aggregate.Member;
 import com.example.BorrowBookService.exception.InvalidReservationRequestException;
 import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.repository.MemberRepository;
-import com.example.BorrowBookService.service.security.SecurityService;
 import com.example.BorrowBookService.usecase.BaseBookHandler;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Request;
@@ -39,7 +38,7 @@ class ReserveBookHandler extends BaseBookHandler implements RequestHandler<Reser
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;
     private final ReserveMapper reserveMapper;
-    private SecurityService securityService;
+
 
     @Override
     @Transactional

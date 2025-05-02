@@ -8,6 +8,7 @@ import com.example.authservice.usecase.query.ValidateToken;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import com.example.buildingblocks.shared.api.DTO.RestApiResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private final Mediator mediator;
 
-    public AuthController(Mediator mediator) {
-        this.mediator = mediator;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<RestApiResponse<AuthTokenResult>> login(@RequestBody Login command) {

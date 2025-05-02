@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.eventHandler;
+package com.example.BorrowBookService.eventHandler.domain_events;
 
 import com.example.BorrowBookService.aggregate.Reservation;
 import com.example.BorrowBookService.event.ReservationExpiredEvent;
@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.util.Collections;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ public class ReservationExpiredEventHandler {
     @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 2000))
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onReservationExpiredEvent(ReservationExpiredEvent reservationExpiredEvent) {
-        Reservation nextPendingReservation =
+        var nextPendingReservation =
                 reservationReadOnlyRepository.getNextReservationOnBook(reservationExpiredEvent.getBookId());
         if (nextPendingReservation == null) {
             return;

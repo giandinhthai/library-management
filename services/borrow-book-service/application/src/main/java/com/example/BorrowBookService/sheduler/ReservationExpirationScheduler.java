@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ReservationExpirationScheduler {
 
-    private final MemberRepository memberRepository;
-    // should call command instead of handle here
     private final Mediator mediator;
 
     @Scheduled(cron = "0 0 0 * * *") // Run at midnight every day
     public void expireReservations() {
-        mediator.send(new BatchExpireReservations());
+        log.info("Starting reservation expiration check");
+        var totalExpired = mediator.send(new BatchExpireReservations());
+        log.info("Completed reservation expiration check. Expired {} reservations", totalExpired);
     }
 }

@@ -29,6 +29,5 @@ class GetBookHandler implements RequestHandler<GetBook,BookResult>{
     @Override
     public BookResult handle(GetBook request) {
         return bookMapper.toResult(bookRepository.findByIdOrThrow(request.getBookId()));
-
     }
 }

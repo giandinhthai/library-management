@@ -7,12 +7,5 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DomainConfig {
-//    @Bean
-//    public BookService bookService() {
-//        return new BookService();
-//    }
-//    @Bean
-//    public BorrowService borrowItemService() {
-//        return new BorrowService();
-//    }
+
 }

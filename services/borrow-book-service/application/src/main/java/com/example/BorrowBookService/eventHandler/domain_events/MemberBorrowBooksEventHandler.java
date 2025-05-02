@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.eventHandler;
+package com.example.BorrowBookService.eventHandler.domain_events;
 
 import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.event.MemberBorrowBooksEvent;
