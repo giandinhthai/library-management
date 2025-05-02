@@ -1,9 +1,9 @@
 package com.example.BorrowBookService.usecase;
 
 import com.example.BorrowBookService.DTO.borrow.BorrowResult;
-import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.repository.MemberRepository;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
+import com.example.buildingblocks.cqrs.request.Command;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReturnBook implements com.example.buildingblocks.cqrs.request.Command<List<BorrowResult>> {
+public class ReturnBook implements Command<List<BorrowResult>> {
     private List<String> listBookId;
     private String memberId;
 

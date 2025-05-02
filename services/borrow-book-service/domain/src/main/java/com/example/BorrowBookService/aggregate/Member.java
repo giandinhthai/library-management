@@ -1,8 +1,10 @@
 package com.example.BorrowBookService.aggregate;
 
 import com.example.BorrowBookService.event.BooksBorrowedEvent;
+import com.example.BorrowBookService.event.BooksReservedEvent;
 import com.example.BorrowBookService.event.BooksReturnedEvent;
 import com.example.BorrowBookService.exception.UnvalidBorrowRequestException;
+import com.example.BorrowBookService.exception.UnvalidReservationRequestException;
 import com.example.BorrowBookService.exception.UnvalidReturnRequestException;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "members")
@@ -29,6 +32,9 @@ public class Member extends AbstractAggregateRoot<Member> {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Borrow> borrows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Reservation> reservations = new ArrayList<>();
 
     public static final int MAX_OUTSTANDING_FINE = 100000;
     public static final int INITIAL_REPUTATION = 50;
@@ -94,7 +100,7 @@ public class Member extends AbstractAggregateRoot<Member> {
         return switch (tier) {
             case BRONZE -> 0;
             case SILVER -> 1;
-            case GOLD -> 1;
+            case GOLD -> 2;
         };
     }
 
@@ -126,7 +132,7 @@ public class Member extends AbstractAggregateRoot<Member> {
         checkCanBorrow(bookUUIDs);
         Borrow borrow = Borrow.create(this, bookUUIDs, booksPrice);
         this.borrows.add(borrow);
-        registerEvent(new BooksBorrowedEvent(bookUUIDs));
+        registerEvent(new BooksBorrowedEvent(memberId,bookUUIDs));
         return borrow;
     }
     public void returnBook(List<UUID> bookUUIDs) {
@@ -145,7 +151,57 @@ public class Member extends AbstractAggregateRoot<Member> {
 
             borrow.markCompletedIfAllReturned();
         }
-        registerEvent(new BooksReturnedEvent(bookUUIDs));
+        registerEvent(new BooksReturnedEvent(memberId,bookUUIDs));
+    }
+    public List<Reservation> reserve(List<UUID> bookUUIDs) {
+        checkCanReserve(bookUUIDs);
+        List<Reservation> reservations = new ArrayList<>();
+        for (UUID bookUUID : bookUUIDs) {
+            reservations.add(Reservation.create(bookUUID, this));
+        }
+        this.reservations.addAll(reservations);
+        registerEvent(new BooksReservedEvent(memberId,bookUUIDs));
+        return reservations;
+    }
+
+    private void checkCanReserve(List<UUID> bookUUIDs) {
+        if (bookUUIDs.isEmpty()) {
+            throw new UnvalidReservationRequestException("Cannot reserve an empty list of books");
+        }
+        if (hasDuplicateBook(bookUUIDs)) {
+            throw new UnvalidReservationRequestException("Cannot reserve the same book multiple times");
+        }
+        if (outstandingFines > MAX_OUTSTANDING_FINE) {
+            throw new UnvalidReservationRequestException("Member currently has outstanding fines: " + outstandingFines + " which exceeds the limit of " + MAX_OUTSTANDING_FINE);
+        }
+        List<UUID> activeReservations = getActiveReservations();
+        Set<UUID> currentlyBorrowedBookIds = getCurrentlyBorrowedBookIds();
+        for (UUID bookId : bookUUIDs) {
+            if (currentlyBorrowedBookIds.contains(bookId)) {
+                throw new UnvalidReservationRequestException("Member has currently borrow book: " + bookId);
+            }
+            if (activeReservations.contains(bookId)) {
+                throw new UnvalidReservationRequestException("Member has already reserved book: " + bookId);
+            }
+        }
+
+        int activeReservationCount = activeReservations.size();
+        if (activeReservationCount + bookUUIDs.size() > getMaxReservationLimit()) {
+            throw new UnvalidReservationRequestException("Member cannot reserve more than " + getMaxReservationLimit() + " books");
+        }
+        Set<UUID> isRecentlyReturned = getRecentlyReturnedBookIds(CONTINUOUS_BORROW_WAITING_DAYS);
+        for (UUID bookUUID : bookUUIDs) {
+            if (isRecentlyReturned.contains(bookUUID)) {
+                throw new UnvalidReservationRequestException("Member must wait for " + CONTINUOUS_BORROW_WAITING_DAYS + " days to reserve book: " + bookUUID + " again");
+            }
+        }
+    }
+
+    private List<UUID> getActiveReservations() {
+        return reservations.stream()
+                .filter(reservation -> reservation.getStatus() == ReservationStatus.PENDING||reservation.getStatus() == ReservationStatus.READY_FOR_PICKUP)
+                .map(Reservation::getBookId)
+                .collect(Collectors.toList());
     }
 
     private void checkValidReturn(List<UUID> bookUUIDs) {

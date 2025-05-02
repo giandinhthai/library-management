@@ -1,10 +1,11 @@
 package com.example.BorrowBookService.controller.v1;
 
 import com.example.BorrowBookService.DTO.borrow.BorrowResult;
+import com.example.BorrowBookService.DTO.reverse.ReserveResult;
 import com.example.BorrowBookService.usecase.BorrowBook;
+import com.example.BorrowBookService.usecase.ReserveBook;
 import com.example.BorrowBookService.usecase.ReturnBook;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
-import com.example.buildingblocks.cqrs.mediator.SpringMediator;
 import com.example.buildingblocks.shared.api.DTO.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,16 +22,25 @@ import java.util.List;
 @AllArgsConstructor
 public class BorrowController {
     private final Mediator mediator;
+
     @PostMapping
     public ResponseEntity<ApiResponse<BorrowResult>> borrowBooks(
-            @RequestBody @Valid BorrowBook  command) {
+            @RequestBody @Valid BorrowBook command) {
         BorrowResult result = mediator.send(command);
         return ResponseEntity.ok(ApiResponse.success(result));
     }
+
     @PostMapping("/returns")
     public ResponseEntity<ApiResponse<List<BorrowResult>>> returnBooks(
             @RequestBody @Valid ReturnBook command) {
         List<BorrowResult> results = mediator.send(command);
+        return ResponseEntity.ok(ApiResponse.success(results));
+    }
+
+    @PostMapping("/reservation")
+    public ResponseEntity<ApiResponse<List<ReserveResult>>> reserveBooks(
+            @RequestBody @Valid ReserveBook command) {
+        List<ReserveResult> results = mediator.send(command);
         return ResponseEntity.ok(ApiResponse.success(results));
     }
 

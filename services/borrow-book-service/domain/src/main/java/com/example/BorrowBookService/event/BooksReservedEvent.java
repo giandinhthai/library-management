@@ -7,13 +7,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-public class BooksReturnedEvent {
+public class BooksReservedEvent {
     private final UUID eventId;
     private final UUID memberId;
     private final List<UUID> bookIds;
     private final LocalDateTime occurredOn;
-
-    public BooksReturnedEvent(UUID memberId,List<UUID> bookIds) {
+    public BooksReservedEvent(UUID memberId, List<UUID> bookIds) {
         this.eventId = UUID.randomUUID();
         this.bookIds = bookIds;
         this.memberId = memberId;
@@ -22,6 +21,6 @@ public class BooksReturnedEvent {
 
 
     public String getEventType() {
-        return "BookReturnedEvent";
+        return "BooksReservedEvent";
     }
 }

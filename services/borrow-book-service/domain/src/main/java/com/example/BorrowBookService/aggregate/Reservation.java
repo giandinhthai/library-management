@@ -1,9 +1,8 @@
 package com.example.BorrowBookService.aggregate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,22 +13,27 @@ public class Reservation {
     @Id
     private UUID reservationId;
     private UUID bookId;
-    private UUID memberId;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ReservationStatus status;
     private LocalDateTime reservedAt;
     private LocalDateTime expiresAt;
     final static int RESERVATION_EXPIRATION_DAYS = 2;
-    private Reservation(UUID reservationId, UUID bookId, UUID memberId) {
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+    private Reservation(UUID reservationId, UUID bookId, Member member) {
         this.reservationId = reservationId;
         this.bookId = bookId;
-        this.memberId = memberId;
+        this.member = member;
         this.status = ReservationStatus.PENDING;
         this.reservedAt = LocalDateTime.now();
         this.expiresAt = null;
     }
     protected Reservation(){}
-    public static Reservation create(UUID bookId, UUID memberId) {
-        return new Reservation(UUID.randomUUID(), bookId, memberId);
+    public static Reservation create(UUID bookId, Member member) {
+        return new Reservation(UUID.randomUUID(), bookId, member);
     }
     private void markAsReady(){
         if (status != ReservationStatus.PENDING) {

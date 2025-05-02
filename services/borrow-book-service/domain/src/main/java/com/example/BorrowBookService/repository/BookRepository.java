@@ -16,4 +16,6 @@ public interface BookRepository {
     Book save(Book book);
 
     List<Book> saveAll(List<Book> books);
+
+    List<Boolean> checkAvailableBookForReserve(List<UUID> listBookId);
 }

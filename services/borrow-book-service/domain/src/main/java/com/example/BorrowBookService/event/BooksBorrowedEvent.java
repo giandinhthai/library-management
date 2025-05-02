@@ -9,11 +9,13 @@ import java.util.UUID;
 @Getter
 public class BooksBorrowedEvent   {
     private final UUID eventId;
+    private final UUID memberId;
     private final List<UUID> bookIds;
     private final LocalDateTime occurredOn;
-    public BooksBorrowedEvent(List<UUID> bookIds) {
+    public BooksBorrowedEvent(UUID memberId,List<UUID> bookIds) {
         this.eventId = UUID.randomUUID();
         this.bookIds = bookIds;
+        this.memberId = memberId;
         this.occurredOn = LocalDateTime.now();
     }
 
