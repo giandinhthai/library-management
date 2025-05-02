@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.38/57f8f5e02e92a30fd21b80cbd426a4172b5f8e29/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="my-project.building-blocks.security.main" />
+        <module name="my-project.services.borrow-book-service.application.main" />
+        <module name="my-project.services.auth-service.infra.main" />
+        <module name="my-project.services.auth-service.application.main" />
+        <module name="my-project.services.borrow-book-service.domain.main" />
+        <module name="my-project.services.borrow-book-service.api.main" />
+        <module name="my-project.services.auth-service.domain.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.38/57f8f5e02e92a30fd21b80cbd426a4172b5f8e29/lombok-1.18.38.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.5.5.Final/897f6f115930b936287bef552bf5fe28cc64717d/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok-mapstruct-binding/0.2.0/2f1cf9ced7b720ba4996c942b816669e63f0fa4f/lombok-mapstruct-binding-0.2.0.jar" />
+        </processorPath>
+        <module name="my-project.services.borrow-book-service.infra.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="22">
+      <module name="droppii-new-project.service" target="22" />
+      <module name="droppii-new-project.service-identity" target="22" />
+      <module name="droppii-new-project.service-identity.main" target="22" />
+      <module name="droppii-new-project.service-identity.test" target="22" />
+      <module name="droppii-new-project.service.main" target="22" />
+      <module name="droppii-new-project.service.test" target="22" />
+      <module name="droppii-new-project.shared" target="22" />
+      <module name="droppii-new-project.shared.main" target="22" />
+      <module name="droppii-new-project.shared.test" target="22" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

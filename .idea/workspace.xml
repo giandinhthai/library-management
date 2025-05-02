@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d8182005-81d5-40d5-84d9-99a3578dfb0a" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/services/auth-service">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/services/auth-service/application">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="application" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="application" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="application" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="compileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="application" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="compileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+                <item name="org.springframework.boot:spring-boot-starter-web:3.4.4" type="b3323d55:ExternalSystemViewDefaultContributor$DependencyExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="application" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="runtimeClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="application" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="testCompileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="application" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="testCompileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+                <item name="project security" type="b3323d55:ExternalSystemViewDefaultContributor$DependencyExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="application" type="2d1252cf:ModuleNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="testRuntimeClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="my-project" type="f1a62948:ProjectNode" />
+                <item name="services" type="2d1252cf:ModuleNode" />
+                <item name="auth-service" type="2d1252cf:ModuleNode" />
+                <item name="domain" type="2d1252cf:ModuleNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/6.2.5/237de0c3afca2099ab497cc7464726c02b8ab5c5/spring-context-6.2.5.jar!/org/springframework/context/event/ApplicationListenerMethodAdapter.class" root0="FORCE_HIGHLIGHTING" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/6.2.5/8bb8672c5e82c85f519f2d23fd7df38acbcf296/spring-context-6.2.5-sources.jar!/org/springframework/context/event/ApplicationListenerMethodAdapter.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/6.2.5/8c4f0ca96f39673cde349ae521cd9933c568cd44/spring-tx-6.2.5-sources.jar!/org/springframework/transaction/event/TransactionalApplicationListenerSynchronization.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/6.2.5/99ecc1c976f58ad63df7205e18eac628f2f1fa9a/spring-tx-6.2.5.jar!/org/springframework/transaction/event/TransactionalApplicationListenerSynchronization.class" root0="FORCE_HIGHLIGHTING" />
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-22.0.2/lib/src.zip!/java.base/jdk/internal/misc/Unsafe.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2vZGlGY3DclPkm5Cir8vkPtKb7x" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Gradle.Build droppii-new-project.executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
+    "Gradle.Load Gradle Dependencies.executor": "Run",
+    "Kotlin script (Beta).generate.main.kts.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.AppApplication.executor": "Run",
+    "Spring Boot.BorrowBookServiceApplication.executor": "Debug",
+    "Spring Boot.LoanManagementServiceApplication.executor": "Run",
+    "com.codeium.enabled": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/dinhthai/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/6.2.5/237de0c3afca2099ab497cc7464726c02b8ab5c5/spring-context-6.2.5.jar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.72446555",
+    "run.configurations.included.in.services": "true",
+    "settings.build.tools.auto.reload": "ALL",
+    "settings.editor.selected.configurable": "project.propDebugger",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.authservice.exceptions" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/services/borrow-book-service/api/src/main" />
+      <recent name="$PROJECT_DIR$/services/borrow-book-service/infra/src/main/java/com/example/BorrowBookService" />
+      <recent name="$PROJECT_DIR$/services/borrow-book-service/infra" />
+      <recent name="$PROJECT_DIR$/services/borrow-book-service/api/src/main/java/com/example/BorrowBookService" />
+      <recent name="$PROJECT_DIR$/building-blocks" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/services/borrow-book-service/infra/src/main/java/com/example/BorrowBookService" />
+      <recent name="$PROJECT_DIR$/service/auth-server" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.BorrowBookService.eventHandler" />
+      <recent name="com.example.BorrowBookService.event" />
+      <recent name="com.example.BorrowBookService.jpa.repository.jpa" />
+      <recent name="com.example.BorrowBookService.jpa.repository" />
+      <recent name="com.example.BorrowBookService.exception" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.BorrowBookServiceApplication">
+    <configuration name="generate.main.kts" type="KotlinStandaloneScriptRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <module name="droppii-new-project" />
+      <option name="filePath" value="$PROJECT_DIR$/generate.main.kts" />
+      <method v="2" />
+    </configuration>
+    <configuration name="AppApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="my-project.services.auth-service.api.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.authservice.AppApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BorrowBookServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="my-project.services.borrow-book-service.api.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.BorrowBookService.BorrowBookServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin script (Beta).generate.main.kts" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d8182005-81d5-40d5-84d9-99a3578dfb0a" name="Changes" comment="" />
+      <created>1744345331924</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1744345331924</updated>
+      <workItem from="1744345333099" duration="1967000" />
+      <workItem from="1744361629050" duration="4483000" />
+      <workItem from="1744376528949" duration="9701000" />
+      <workItem from="1744446944052" duration="7167000" />
+      <workItem from="1744461729318" duration="12364000" />
+      <workItem from="1744512290603" duration="6900000" />
+      <workItem from="1744529950786" duration="8000" />
+      <workItem from="1744530241021" duration="6368000" />
+      <workItem from="1744546625652" duration="5874000" />
+      <workItem from="1744595879719" duration="3344000" />
+      <workItem from="1744620035880" duration="22162000" />
+      <workItem from="1744681854931" duration="29606000" />
+      <workItem from="1744718926862" duration="11202000" />
+      <workItem from="1744768260272" duration="29352000" />
+      <workItem from="1744807767099" duration="362000" />
+      <workItem from="1744810670724" duration="3150000" />
+      <workItem from="1744817005574" duration="1360000" />
+      <workItem from="1744854941597" duration="9376000" />
+      <workItem from="1744864451679" duration="968000" />
+      <workItem from="1744865438679" duration="4336000" />
+      <workItem from="1744871295234" duration="3411000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/auth-service/application/src/main/java/com/example/authservice/usecase/RefreshToken.java</url>
+          <line>33</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/auth-service/infra/src/main/java/com/example/authservice/jpa/repository/AuthUserRepositoryImpl.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/auth-service/infra/src/main/java/com/example/authservice/jpa/mapper/AuthUserMapper.java</url>
+          <line>15</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/auth-service/application/src/main/java/com/example/authservice/usecase/ValidateToken.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/auth-service/infra/src/main/java/com/example/authservice/security/jwt/JwtAccessTokenGeneratorImpl.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/auth-service/infra/src/main/java/com/example/authservice/security/token/RefreshTokenGeneratorImpl.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/borrow-book-service/application/src/main/java/com/example/BorrowBookService/eventHandler/BookReturnedEventHandler.java</url>
+          <line>27</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/borrow-book-service/application/src/main/java/com/example/BorrowBookService/eventHandler/BookReturnedEventHandler.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/borrow-book-service/domain/src/main/java/com/example/BorrowBookService/aggregate/Member.java</url>
+          <line>137</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/services/borrow-book-service/domain/src/main/java/com/example/BorrowBookService/aggregate/Member.java</url>
+          <line>147</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/services/auth-service/infra/src/main/java/com/example/authservice/security/jwt/JwtAccessTokenGeneratorImpl.java</url>
+          <line>43</line>
+          <properties class="com.example.authservice.security.jwt.JwtAccessTokenGeneratorImpl" method="validateToken">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.example.BorrowBookService.aggregate.Book" memberName="availableQuantity" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
