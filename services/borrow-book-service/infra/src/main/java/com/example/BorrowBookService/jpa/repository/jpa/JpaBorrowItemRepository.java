@@ -16,14 +16,14 @@ import java.util.UUID;
 
 @Repository
 public interface JpaBorrowItemRepository extends JpaRepository<BorrowItem, UUID> {
-    @Query("""
-            SELECT bi
-            FROM Borrow b
-            JOIN b.borrowItems bi
-            WHERE b.member.memberId = :memberId
-            AND bi.bookId IN :listBookId
-            AND bi.returned = false
-            """)
+    @Query(value = """
+    SELECT bi.*
+    FROM borrow_items bi
+    JOIN borrows b ON bi.borrow_id = b.borrow_id
+    WHERE bi.book_id in (:listBookId)
+      AND bi.is_returned = false
+      AND b.member_id = :memberId
+    """, nativeQuery = true)
     List<BorrowItem> getBorrowItem(@Param("memberId") UUID memberId,@Param("listBookId") List<UUID> listBookId);
     @Query("""
             SELECT bi

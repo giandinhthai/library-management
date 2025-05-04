@@ -5,6 +5,8 @@ import com.example.BorrowBookService.event.MemberReturnBooksEvent;
 import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.repository.MemberRepository;
 import com.example.BorrowBookService.repository.ReservationReadOnlyRepository;
+import com.example.BorrowBookService.usecase.command.UpdateBooksStatusOnReturn;
+import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,18 +19,11 @@ import java.util.*;
 @AllArgsConstructor
 @Slf4j
 public class MemberReturnBooksEventHandler {
-    private final BookRepository bookRepository;
-
+    private final Mediator mediator;
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void updateBookStatusOnMemberReturnedEvent(MemberReturnBooksEvent memberReturnBooksEvent) {
+    public void updateBookStatusOnMemberReturnedEvent(MemberReturnBooksEvent event) {
         log.info("Book returned event received");
-        var books = bookRepository.findAllByIdOrThrow(
-                List.copyOf(memberReturnBooksEvent.getBookIds()));
-
-        for (Book book : books) {
-            book.isReturned();
-        }
-        bookRepository.saveAll(books);
+        mediator.send(new UpdateBooksStatusOnReturn(List.copyOf(event.getBookIds())));
     }
 
 

@@ -9,10 +9,7 @@ import com.example.BorrowBookService.repository.MemberRepository;
 import com.example.BorrowBookService.usecase.BaseBookHandler;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Request;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -26,6 +23,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ReserveBook implements Request<List<ReserveResult>> {
     private List<UUID> listBookId;
     private UUID memberId;

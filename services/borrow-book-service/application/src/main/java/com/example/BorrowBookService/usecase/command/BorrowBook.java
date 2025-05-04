@@ -11,6 +11,7 @@ import com.example.BorrowBookService.usecase.BaseBookHandler;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Command;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class BorrowBook implements Command<BorrowResult> {
     private List<UUID> listBookId;
     private UUID memberId;

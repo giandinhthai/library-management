@@ -36,5 +36,10 @@ public class MemberRepositoryAdapter implements MemberRepository {
         return jpaMemberRepository.findAllWithReadyReservations();
     }
 
+    @Override
+    public List<Member> findAll() {
+        return jpaMemberRepository.findAll();
+    }
+
 
 }

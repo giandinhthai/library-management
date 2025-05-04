@@ -18,7 +18,7 @@ public class AuthUserJpaEntity {
     @Id
     @Column(name = "user_id", nullable = false)
     private UUID userId;
-
+    @Column(nullable = false,unique = true)
     private String email;
 
     private String hashedPassword;

@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ReturnBook implements Command<Set<BorrowResult>> {
     private List<UUID> listBookId;
     private UUID memberId;

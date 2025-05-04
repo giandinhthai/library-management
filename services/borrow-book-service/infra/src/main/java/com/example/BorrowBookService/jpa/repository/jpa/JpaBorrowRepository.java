@@ -15,10 +15,10 @@ import java.util.UUID;
 @Repository
 public interface JpaBorrowRepository extends JpaRepository<Borrow, UUID> {
     @Query(value = """
-            SELECT b
-            FROM Borrow b
-            WHERE b.member.memberId = :memberId
-            AND (:status IS NULL OR b.status = :status)
-            """)
+    SELECT b.*
+    FROM borrows b
+    WHERE b.member_id = :memberId
+    AND COALESCE(:status, b.status) = b.status
+    """, nativeQuery = true)
     Page<Borrow> getBorrowOnMember(@Param("memberId") UUID memberId, @Param("status") BorrowStatus status, Pageable pageable);
 }

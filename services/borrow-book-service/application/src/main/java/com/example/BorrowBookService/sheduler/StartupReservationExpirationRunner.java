@@ -17,7 +17,6 @@ import java.util.Collections;
 public class StartupReservationExpirationRunner implements CommandLineRunner {
 
     private final ReservationExpirationScheduler expirationScheduler;
-
     @Override
     @Transactional
     public void run(String... args) {

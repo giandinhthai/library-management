@@ -3,6 +3,8 @@ package com.example.BorrowBookService.eventHandler.domain_events;
 import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.event.ReservationReadyEvent;
 import com.example.BorrowBookService.repository.BookRepository;
+import com.example.BorrowBookService.usecase.command.ApproveBookReservation;
+import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
@@ -19,20 +21,17 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class ReservationReadyEventHandler {
 
-    private final BookRepository bookRepository;
-
+    private final Mediator mediator;
     @Async
     @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 2000))
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void notifyMemberOnReservationReadyEvent(ReservationReadyEvent reservationReadyEvent) {
-        log.info("notify member that book with id " + reservationReadyEvent.getReservation().getBookId() + " is ready");
+        log.info("notify member that book with id {} is ready", reservationReadyEvent.getReservation().getBookId());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void updateBookStatusOnReservationReadyEvent(ReservationReadyEvent reservationReadyEvent) {
-        Book book = bookRepository.findByIdOrThrow(reservationReadyEvent.getReservation().getBookId());
-        book.approveReserved();
-        bookRepository.save(book);
+    public void updateBookStatusOnReservationReadyEvent(ReservationReadyEvent event) {
+        mediator.send(new ApproveBookReservation(event.getReservation().getBookId()));
     }
 }

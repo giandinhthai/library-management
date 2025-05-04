@@ -31,7 +31,7 @@ public class Borrow {
     private boolean finePaid;
 
     @OneToMany(mappedBy = "borrow", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BorrowItem> borrowItems = new ArrayList<>();
+    private final List<BorrowItem> borrowItems = new ArrayList<>();
 
     @Setter
     @ManyToOne
@@ -88,20 +88,32 @@ public class Borrow {
 //        checkBorrowStatus();
 //    }
 
-    public void markCompletedIfAllReturned() {
+    protected void markCompletedIfAllReturned() {
         if (this.borrowItems.stream().allMatch(BorrowItem::isReturned)) {
             this.status = BorrowStatus.COMPLETED;
         }
     }
 
 
-    public void changeTotalFineAmount(int fineAmount) {
+    protected void changeTotalFineAmount(int fineAmount) {
         this.totalFineAmount += fineAmount;
     }
 
-    public void returnBorrowItem(BorrowItem item) {
+    protected void returnBorrowItem(BorrowItem item) {
         item.processReturn();
         changeTotalFineAmount(item.getFineAmount());
         markCompletedIfAllReturned();
+    }
+    protected Set<UUID> getCurrentlyBorrowedBookIds(){
+        if (this.status == BorrowStatus.COMPLETED) {
+            return new HashSet<>();
+        }
+        Set<UUID> currentlyBorrowedBookIds = new HashSet<>();
+        for (BorrowItem item : borrowItems) {
+            if (!item.isReturned()) {
+                currentlyBorrowedBookIds.add(item.getBookId());
+            }
+        }
+        return currentlyBorrowedBookIds;
     }
 }

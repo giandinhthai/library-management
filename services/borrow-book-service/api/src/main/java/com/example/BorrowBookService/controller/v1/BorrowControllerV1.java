@@ -1,32 +1,20 @@
 package com.example.BorrowBookService.controller.v1;
 
-import com.example.BorrowBookService.DTO.book.BookResult;
-import com.example.BorrowBookService.DTO.borrow.BorrowItemOnBook;
 import com.example.BorrowBookService.DTO.borrow.BorrowResult;
-import com.example.BorrowBookService.DTO.reverse.ReserveResult;
 import com.example.BorrowBookService.aggregate.BorrowStatus;
-import com.example.BorrowBookService.aggregate.ReservationStatus;
 import com.example.BorrowBookService.usecase.command.BorrowBook;
-import com.example.BorrowBookService.usecase.command.CompleteReservation;
-import com.example.BorrowBookService.usecase.command.ReserveBook;
 import com.example.BorrowBookService.usecase.command.ReturnBook;
-import com.example.BorrowBookService.usecase.query.*;
+import com.example.BorrowBookService.usecase.query.GetMemberBorrows;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import com.example.buildingblocks.shared.api.DTO.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

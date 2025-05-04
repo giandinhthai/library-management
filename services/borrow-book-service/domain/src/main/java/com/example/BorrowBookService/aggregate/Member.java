@@ -241,35 +241,20 @@ public class Member extends AbstractAggregateRoot<Member> {
         return recentlyReturnedBookIds;
     }
 
-    private Set<UUID> getCurrentlyBorrowedBookIds() {
+    public Set<UUID> getCurrentlyBorrowedBookIds() {
         Set<UUID> currentlyBorrowedBookIds = new HashSet<>();
         for (Borrow borrow : borrows) {
-            if (borrow.getStatus() == BorrowStatus.COMPLETED) {
-                continue;
-            }
-            for (BorrowItem item : borrow.getBorrowItems()) {
-                if (!item.isReturned()) {
-                    currentlyBorrowedBookIds.add(item.getBookId());
-                }
-            }
+            currentlyBorrowedBookIds.addAll(borrow.getCurrentlyBorrowedBookIds());
         }
         return currentlyBorrowedBookIds;
     }
 
-    private boolean hasDuplicateBook(List<UUID> bookUUIDs) {
-        Set<UUID> uniqueBookIds = new HashSet<>();
-        for (UUID bookUUID : bookUUIDs) {
-            if (!uniqueBookIds.add(bookUUID)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
-    public void markAsReadyReservationContains(Reservation reservation) {
+    public UUID markAsReadyReservationContains(Reservation reservation) {
         reservation.markAsReady();
         registerEvent(new ReservationReadyEvent(reservation));
+        return reservation.getReservationId();
     }
 
 

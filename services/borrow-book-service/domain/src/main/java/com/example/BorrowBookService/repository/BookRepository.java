@@ -25,4 +25,6 @@ public interface BookRepository {
     Book findByIdOrThrow(UUID bookId);
 
     Integer getPrice(UUID bookId);
+
+    List<Book> findAll();
 }

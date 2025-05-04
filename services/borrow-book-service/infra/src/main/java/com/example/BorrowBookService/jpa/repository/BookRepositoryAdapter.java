@@ -110,5 +110,10 @@ public class BookRepositoryAdapter implements BookRepository {
         return bookJpaRepository.getPrice(bookId);
     }
 
+    @Override
+    public List<Book> findAll() {
+        return bookJpaRepository.findAll();
+    }
+
 
 }

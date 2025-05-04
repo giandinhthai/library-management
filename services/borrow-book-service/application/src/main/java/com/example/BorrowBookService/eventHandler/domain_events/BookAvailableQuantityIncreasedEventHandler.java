@@ -5,6 +5,8 @@ import com.example.BorrowBookService.aggregate.Reservation;
 import com.example.BorrowBookService.event.BookAvailableQuantityIncreasedEvent;
 import com.example.BorrowBookService.repository.MemberRepository;
 import com.example.BorrowBookService.repository.ReservationReadOnlyRepository;
+import com.example.BorrowBookService.usecase.command.UpdateNextPendingReservationOnBook;
+import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
@@ -21,19 +23,16 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class BookAvailableQuantityIncreasedEventHandler {
     private final MemberRepository memberRepository;
     private final ReservationReadOnlyRepository reservationReadOnlyRepository;
+    private final Mediator mediator;
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 2000))
     public void updateNextPendingReservationStatusOnBookReturnedEvent(BookAvailableQuantityIncreasedEvent bookAvailableQuantityIncreasedEvent) {
         log.info("Member reservation status updated");
-        var bookUUID = bookAvailableQuantityIncreasedEvent.getBookId();
-        Reservation nextPendingReservation = reservationReadOnlyRepository.getNextReservationOnBook(bookUUID);
-        if (nextPendingReservation == null) {
-            log.info("no pending reservation for book {}", bookUUID);
+        var reservationId = mediator.send(new UpdateNextPendingReservationOnBook(bookAvailableQuantityIncreasedEvent.getBookId()));
+        if (reservationId == null) {
             return;
         }
-        Member member = nextPendingReservation.getMember();
-        member.markAsReadyReservationContains(nextPendingReservation);
-        memberRepository.save(member);
+        log.info("Reservation id: {} has update to ready for pickup", reservationId);
     }
 }

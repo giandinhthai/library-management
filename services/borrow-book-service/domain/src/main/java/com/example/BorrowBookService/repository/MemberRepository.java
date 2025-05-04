@@ -18,5 +18,7 @@ public interface MemberRepository {
 
     List<Member> findAllWithReadyReservations();
 
+    List<Member> findAll();
+
 //    Member getNextReservationMember(UUID bookId);
 }

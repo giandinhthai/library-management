@@ -14,14 +14,11 @@ import java.util.Collections;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class StartupReservationExpirationRunner implements CommandLineRunner {
+public class GenDataRunner implements CommandLineRunner {
 
-    private final ReservationExpirationScheduler expirationScheduler;
     private final RandomBookJob randomBookJob;
     @Override
-    @Transactional
     public void run(String... args) {
-        log.info("Running initial reservation expiration check on application startup");
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 "batch-user", // Principal (e.g., username)
                 null, // Credentials (can be null for batch jobs)
@@ -30,7 +27,7 @@ public class StartupReservationExpirationRunner implements CommandLineRunner {
 
         // Set the SecurityContext
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        expirationScheduler.expireReservations();
+
         randomBookJob.executeJob();
     }
 }
