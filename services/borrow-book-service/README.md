@@ -1,8 +1,47 @@
 # Library System Features
+## auth server
+- validate token
+- integration event when register -> create member if role member in borrow service
 
-## 📚 Borrow
-- Subtract quantity of book when borrowed.
-- Create a borrow record for the book.
+## Book
+- Book has available quantity and reservation quantity => lock when using for update
+- active or not
+## Member
+- Member has reservation
+- Member has borrow
+- Member has fine => calculate by overdue on borrow item
+- Member has reputation => membership tier => max reservation limit, max borrow limit
+- Member cannot borrow book while having reservation on it or recently returned on 2 days
+- Can only reserve book if available quantity=0
+- Member cannot reserve that recently returned on 2 days or currently borrowed
+
+## Borrow
+- Contain borrow date, overdue date
+- Status (ACTIVE, COMPLETED) => completed when all book returned
+- Member id
+- List<BorrowItem> => book id, fine amount
+## BorrowItem
+- Book id
+- Book Price when borrow => for fine
+- Fine amount => calculate fine here
+- returned and returnedAt => Update next pending reservation status to `READY_FOR_PICKUP`
+## Reservation
+- Contain reservation date
+- Status (PENDING, READY_FOR_PICKUP, COMPLETED, EXPIRED)
+- Member id
+- Book id
+- Reservation 'READY_FOR_PICKUP' => expires in 2 days
+
+## Another user : librarian or admin
+- make return and borrow command
+## index for db
+
+
+
+
+
+
+
 
 ## 🔁 Return
 - Increase book quantity upon return.

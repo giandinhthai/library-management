@@ -4,12 +4,15 @@ import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.aggregate.ReservationStatus;
 import com.example.BorrowBookService.DTO.BookAvailablePair;
 import com.example.BorrowBookService.DTO.BookPricePair;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface JpaBookRepository extends JpaRepository<Book, UUID> {
@@ -44,4 +47,12 @@ public interface JpaBookRepository extends JpaRepository<Book, UUID> {
         WHERE book_id = :bookId
         """, nativeQuery = true)
     Integer getPrice(@Param("bookId") UUID bookId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT b FROM Book b WHERE b.bookId = :id")
+    Optional<Book> findByIdForUpdate(@Param("id") UUID id);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT b FROM Book b WHERE b.bookId IN :ids")
+    List<Book> findAllByIdForUpdate(@Param("ids") List<UUID> ids);
 }

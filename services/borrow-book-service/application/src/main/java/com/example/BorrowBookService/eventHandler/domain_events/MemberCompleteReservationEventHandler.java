@@ -1,8 +1,6 @@
 package com.example.BorrowBookService.eventHandler.domain_events;
 
-import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.event.MemberCompleteReservationEvent;
-import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.usecase.command.CompleteBookReservation;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +17,11 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Slf4j
 public class MemberCompleteReservationEventHandler {
     private final Mediator mediator;
+
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void updateBookStatusOnReservationCompleted(MemberCompleteReservationEvent event) {
         log.info("Processing reservation completion for book: {}", event.getReservation().getBookId());
         mediator.send(new CompleteBookReservation(event.getReservation().getBookId()));
-        log.info("Successfully processed reservation completion for book: {}", event.getReservation().getBookId());    }
+        log.info("Successfully processed reservation completion for book: {}", event.getReservation().getBookId());
+    }
 }

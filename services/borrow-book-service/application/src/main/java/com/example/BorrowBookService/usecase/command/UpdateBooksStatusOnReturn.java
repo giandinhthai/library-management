@@ -28,7 +28,7 @@ class UpdateBooksStatusOnReturnHandler implements RequestHandler<UpdateBooksStat
     @Override
     @Transactional
     public List<UUID> handle(UpdateBooksStatusOnReturn command) {
-        List<Book> books = bookRepository.findAllByIdOrThrow(command.getBookIds());
+        List<Book> books = bookRepository.findAllByIdForUpdateOrThrow(command.getBookIds());
 
         for (Book book : books) {
             book.isReturned();

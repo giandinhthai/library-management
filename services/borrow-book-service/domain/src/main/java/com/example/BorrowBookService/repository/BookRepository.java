@@ -9,6 +9,7 @@ import java.util.UUID;
 public interface BookRepository {
     List<Book> findAllByIdOrThrow(List<UUID> bookUUIDs);
 
+    List<Book> findAllByIdForUpdateOrThrow(List<UUID> bookUUIDs);
 
     Map<UUID,Boolean> validateAvailableBookForBorrow(List<UUID> bookUUIDs);
 
@@ -27,4 +28,5 @@ public interface BookRepository {
     Integer getPrice(UUID bookId);
 
     List<Book> findAll();
+    Book findByIdForUpdateOrThrow(UUID bookId);
 }

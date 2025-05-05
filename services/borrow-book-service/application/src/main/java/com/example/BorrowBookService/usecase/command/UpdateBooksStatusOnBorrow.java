@@ -31,7 +31,7 @@ class UpdateBooksStatusOnBorrowHandler implements RequestHandler<UpdateBooksStat
     @Override
     @Transactional
     public List<UUID> handle(UpdateBooksStatusOnBorrow command) {
-        List<Book> books = bookRepository.findAllByIdOrThrow(command.getBookIds());
+        List<Book> books = bookRepository.findAllByIdForUpdateOrThrow(command.getBookIds());
         for (Book book : books) {
             book.getBorrowed();
         }

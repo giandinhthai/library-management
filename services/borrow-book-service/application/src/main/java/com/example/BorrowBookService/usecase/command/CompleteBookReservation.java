@@ -28,7 +28,7 @@ class CompleteBookReservationHandler implements RequestHandler<CompleteBookReser
     @Override
     @Transactional
     public UUID handle(CompleteBookReservation command) {
-        Book book = bookRepository.findByIdOrThrow(command.getBookId());
+        Book book = bookRepository.findByIdForUpdateOrThrow(command.getBookId());
         book.completeReservation();
         bookRepository.save(book);
         return book.getBookId();

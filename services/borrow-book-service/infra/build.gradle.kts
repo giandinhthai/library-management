@@ -1,6 +1,7 @@
 plugins {
     java
-    
+    id("org.springframework.boot") version "3.4.4"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
 repositories {
@@ -31,5 +32,19 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")
 
-
+    testRuntimeOnly("com.h2database:h2")  // For testing with in-memory database
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.4")
+    testCompileOnly("org.projectlombok:lombok:1.18.38")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+}
+sourceSets {
+    test {
+        java {
+            srcDirs("src/test/java")
+        }
+    }
+}
+tasks.test {
+    useJUnitPlatform()
 }

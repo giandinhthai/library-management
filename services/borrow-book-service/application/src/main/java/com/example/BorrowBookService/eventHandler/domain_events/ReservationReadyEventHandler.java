@@ -1,8 +1,6 @@
 package com.example.BorrowBookService.eventHandler.domain_events;
 
-import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.event.ReservationReadyEvent;
-import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.usecase.command.ApproveBookReservation;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +20,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class ReservationReadyEventHandler {
 
     private final Mediator mediator;
+
     @Async
     @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 2000))
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

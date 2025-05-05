@@ -7,6 +7,7 @@ import com.example.BorrowBookService.DTO.BookAvailablePair;
 import com.example.BorrowBookService.DTO.BookPricePair;
 import com.example.BorrowBookService.jpa.repository.jpa.JpaBookRepository;
 import com.example.BorrowBookService.repository.BookRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +25,16 @@ public class BookRepositoryAdapter implements BookRepository {
     public List<Book> findAllByIdOrThrow(List<UUID> bookUUIDs) {
         List<Book> foundBooks = bookJpaRepository.findAllById(bookUUIDs);
 
+        return getFoundBooks(bookUUIDs, foundBooks);
+    }
+    @Override
+    public List<Book> findAllByIdForUpdateOrThrow(List<UUID> bookUUIDs) {
+        List<Book> foundBooks = bookJpaRepository.findAllByIdForUpdate(bookUUIDs);
+
+        return getFoundBooks(bookUUIDs, foundBooks);
+    }
+
+    private List<Book> getFoundBooks(List<UUID> bookUUIDs, List<Book> foundBooks) {
         if (foundBooks.size() != bookUUIDs.size()) {
             Set<UUID> foundBookIds = foundBooks.stream()
                     .map(Book::getBookId)
@@ -102,6 +113,11 @@ public class BookRepositoryAdapter implements BookRepository {
     @Override
     public Book findByIdOrThrow(UUID bookId) {
         return bookJpaRepository.findById(bookId)
+                .orElseThrow(() -> new NotFoundException("Book not found with ID: " + bookId));
+    }
+    @Override
+    public Book findByIdForUpdateOrThrow(UUID bookId) {
+        return bookJpaRepository.findByIdForUpdate(bookId)
                 .orElseThrow(() -> new NotFoundException("Book not found with ID: " + bookId));
     }
 

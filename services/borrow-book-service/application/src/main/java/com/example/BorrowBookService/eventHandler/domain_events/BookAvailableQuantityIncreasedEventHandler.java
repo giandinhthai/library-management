@@ -21,8 +21,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 @Slf4j
 public class BookAvailableQuantityIncreasedEventHandler {
-    private final MemberRepository memberRepository;
-    private final ReservationReadOnlyRepository reservationReadOnlyRepository;
     private final Mediator mediator;
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

@@ -27,7 +27,7 @@ class ApproveBookReservationHandler implements RequestHandler<ApproveBookReserva
     @Override
     @Transactional
     public UUID handle(ApproveBookReservation command) {
-        Book book = bookRepository.findByIdOrThrow(command.getBookId());
+        Book book = bookRepository.findByIdForUpdateOrThrow(command.getBookId());
         book.approveReserved();
         bookRepository.save(book);
         return book.getBookId();
