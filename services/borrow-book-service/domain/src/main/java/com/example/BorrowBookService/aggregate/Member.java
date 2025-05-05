@@ -1,9 +1,9 @@
 package com.example.BorrowBookService.aggregate;
 
-import com.example.BorrowBookService.event.BooksBorrowedEvent;
-import com.example.BorrowBookService.event.BooksReturnedEvent;
-import com.example.BorrowBookService.exception.UnvalidBorrowRequestException;
-import com.example.BorrowBookService.exception.UnvalidReturnRequestException;
+import com.example.BorrowBookService.event.*;
+import com.example.BorrowBookService.exception.InvalidBorrowRequestException;
+import com.example.BorrowBookService.exception.InvalidReservationRequestException;
+import com.example.BorrowBookService.exception.InvalidReturnRequestException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -11,6 +11,7 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "members")
@@ -30,24 +31,24 @@ public class Member extends AbstractAggregateRoot<Member> {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Borrow> borrows = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Reservation> reservations = new ArrayList<>();
+
     public static final int MAX_OUTSTANDING_FINE = 100000;
     public static final int INITIAL_REPUTATION = 50;
     public static final int MONTHLY_REPUTATION_INCREASE = 5;
-    public static final int MINOR_OVERDUE_PENALTY = 5;  // For 1-7 days overdue
-    public static final int MAJOR_OVERDUE_PENALTY = 20; // For >7 days overdue
-    public static final int OVERDUE_PENALTY_DIFFERENCE = MAJOR_OVERDUE_PENALTY - MINOR_OVERDUE_PENALTY;
     public static final int MAX_REPUTATION = 100;
     public static final int MIN_REPUTATION = 0;
     public static final int CONTINUOUS_BORROW_WAITING_DAYS = 2;
     public static final int BRONZE_MAX_REPUTATION = 40;
     public static final int SILVER_MAX_REPUTATION = 80;
 
-    private Member(UUID uuid, String email) {
+    private Member(UUID uuid, String email, int reputation, MembershipTier tier, int outstandingFines) {
         this.memberId = uuid;
         this.email = email;
-        this.reputation = INITIAL_REPUTATION;
-        this.tier = MembershipTier.BRONZE;
-        this.outstandingFines = 0;
+        this.reputation = reputation;
+        this.tier = tier;
+        this.outstandingFines = outstandingFines;
     }
 
     protected Member() {
@@ -55,8 +56,8 @@ public class Member extends AbstractAggregateRoot<Member> {
     }
 
     // Domain methods
-    public static Member create(String email) {
-        return new Member(UUID.randomUUID(), email);
+    public static Member create(UUID uuid, String email) {
+        return new Member(uuid, email, INITIAL_REPUTATION, MembershipTier.BRONZE, 0);
     }
 
 
@@ -94,7 +95,7 @@ public class Member extends AbstractAggregateRoot<Member> {
         return switch (tier) {
             case BRONZE -> 0;
             case SILVER -> 1;
-            case GOLD -> 1;
+            case GOLD -> 2;
         };
     }
 
@@ -113,80 +114,113 @@ public class Member extends AbstractAggregateRoot<Member> {
         updateReputation(MONTHLY_REPUTATION_INCREASE);
     }
 
-    public void applyOverdueReturnPenalty(int daysOverdue) {
-        if (daysOverdue > 7) {
-            updateReputation(-OVERDUE_PENALTY_DIFFERENCE);
-        } else if (daysOverdue > 0) {
-            updateReputation(-MINOR_OVERDUE_PENALTY);
-        }
-    }
 
 
-    public Borrow borrow(List<UUID> bookUUIDs, List<Integer> booksPrice) {
-        checkCanBorrow(bookUUIDs);
-        Borrow borrow = Borrow.create(this, bookUUIDs, booksPrice);
+    public Borrow borrow(Map<UUID, Integer> booksPrice) {
+        checkCanBorrow(booksPrice.keySet());
+        Borrow borrow = Borrow.create(this, booksPrice);
         this.borrows.add(borrow);
-        registerEvent(new BooksBorrowedEvent(bookUUIDs));
+        registerEvent(new MemberBorrowBooksEvent(memberId,booksPrice.keySet()));
         return borrow;
     }
-    public void returnBook(List<UUID> bookUUIDs) {
-        checkValidReturn(bookUUIDs);
-        for(Borrow borrow : borrows){
-            if(borrow.getStatus() == BorrowStatus.COMPLETED){
-                continue;
-            }
-            borrow.getBorrowItems().stream()
-                    .filter(item -> !item.isReturned() && bookUUIDs.contains(item.getBookId()))
-                    .forEach(item -> {
-                        item.processReturn();
-                        borrow.changeTotalFineAmount(item.getFineAmount());
-                        this.addFine(item.getFineAmount());
-                    });
-
-            borrow.markCompletedIfAllReturned();
+    public Set<Borrow> returnBook(List<BorrowItem> borrowItems) {
+        var borrows= borrowItems.stream().map(BorrowItem::getBorrow).collect(Collectors.toSet());
+        checkValidReturn(borrows);
+        for (BorrowItem borrowItem:borrowItems) {
+            borrowItem.getBorrow().returnBorrowItem(borrowItem);
+            addFine(borrowItem.getFineAmount());
         }
-        registerEvent(new BooksReturnedEvent(bookUUIDs));
+        registerEvent(new MemberReturnBooksEvent(memberId,borrowItems.stream().map(BorrowItem::getBookId).collect(Collectors.toSet())));
+        return borrows;
+
     }
-
-    private void checkValidReturn(List<UUID> bookUUIDs) {
-        if(bookUUIDs.isEmpty()){
-            throw new UnvalidReturnRequestException("Cannot return an empty list of books");
-        }
-        Set<UUID> currentlyBorrowedBookIds = getCurrentlyBorrowedBookIds();
+    public List<Reservation> reserve(Set<UUID> bookUUIDs) {
+        checkCanReserve(bookUUIDs);
+        List<Reservation> reservations = new ArrayList<>();
         for (UUID bookUUID : bookUUIDs) {
-            if (!currentlyBorrowedBookIds.contains(bookUUID)) {
-                throw new UnvalidReturnRequestException("Member has not borrowed book: " + bookUUID);
+            reservations.add(Reservation.create(bookUUID, this));
+        }
+        this.reservations.addAll(reservations);
+        registerEvent(new BooksReservedEvent(memberId,bookUUIDs));
+        return reservations;
+    }
+
+    private void checkCanReserve(Set<UUID> bookUUIDs) {
+        if (bookUUIDs.isEmpty()) {
+            throw new InvalidReservationRequestException("Cannot reserve an empty list of books");
+        }
+//        if (hasDuplicateBook(bookUUIDs)) {
+//            throw new InvalidReservationRequestException("Cannot reserve the same book multiple times");
+//        }
+        if (outstandingFines > MAX_OUTSTANDING_FINE) {
+            throw new InvalidReservationRequestException("Member currently has outstanding fines: " + outstandingFines + " which exceeds the limit of " + MAX_OUTSTANDING_FINE);
+        }
+        List<UUID> activeReservations = getActiveReservations();
+        Set<UUID> currentlyBorrowedBookIds = getCurrentlyBorrowedBookIds();
+        for (UUID bookId : bookUUIDs) {
+            if (currentlyBorrowedBookIds.contains(bookId)) {
+                throw new InvalidReservationRequestException("Member has currently borrow book: " + bookId);
+            }
+            if (activeReservations.contains(bookId)) {
+                throw new InvalidReservationRequestException("Member has already reserved book: " + bookId);
+            }
+        }
+
+        int activeReservationCount = activeReservations.size();
+        if (activeReservationCount + bookUUIDs.size() > getMaxReservationLimit()) {
+            throw new InvalidReservationRequestException("Member cannot reserve more than " + getMaxReservationLimit() + " books");
+        }
+        Set<UUID> isRecentlyReturned = getRecentlyReturnedBookIds(CONTINUOUS_BORROW_WAITING_DAYS);
+        for (UUID bookUUID : bookUUIDs) {
+            if (isRecentlyReturned.contains(bookUUID)) {
+                throw new InvalidReservationRequestException("Member must wait for " + CONTINUOUS_BORROW_WAITING_DAYS + " days to reserve book: " + bookUUID + " again");
+            }
+        }
+    }
+
+    private List<UUID> getActiveReservations() {
+        return reservations.stream()
+                .filter(reservation -> reservation.getStatus() == ReservationStatus.PENDING||reservation.getStatus() == ReservationStatus.READY_FOR_PICKUP)
+                .map(Reservation::getBookId)
+                .collect(Collectors.toList());
+    }
+
+    private void checkValidReturn(Set<Borrow> borrows) {
+        if (borrows.isEmpty()) {
+            throw new InvalidReturnRequestException("Cannot return an empty list of books");
+        }
+        for (Borrow borrow : borrows) {
+            if (borrow.getMember() != this) {
+                throw new InvalidReturnRequestException("Borrow does not belong to member");
             }
         }
 
     }
 
-    private void checkCanBorrow(List<UUID> bookUUIDs) {
+    private void checkCanBorrow(Set<UUID> bookUUIDs) {
         if (bookUUIDs.isEmpty()) {
-            throw new UnvalidBorrowRequestException("Cannot borrow an empty list of books");
+            throw new InvalidBorrowRequestException("Cannot borrow an empty list of books");
         }
-        if (hasDuplicateBook(bookUUIDs)) {
-            throw new UnvalidBorrowRequestException("Cannot borrow the same book multiple times");
+        if (hasReadyReservationOn(bookUUIDs)){
+            throw new InvalidBorrowRequestException("Member has a ready reservation on one of the books");
         }
         if (outstandingFines > MAX_OUTSTANDING_FINE) {
-            throw new UnvalidBorrowRequestException("Member currently has outstanding fines: " + outstandingFines + " which exceeds the limit of " + MAX_OUTSTANDING_FINE);
+            throw new InvalidBorrowRequestException("Member currently has outstanding fines: " + outstandingFines + " which exceeds the limit of " + MAX_OUTSTANDING_FINE);
         }
         Set<UUID> currentlyBorrowedBookIds = getCurrentlyBorrowedBookIds();
         for (UUID bookUUID : bookUUIDs) {
             if (currentlyBorrowedBookIds.contains(bookUUID)) {
-                throw new UnvalidBorrowRequestException("Member has already borrowed book: " + bookUUID);
+                throw new InvalidBorrowRequestException("Member has already borrowed book: " + bookUUID);
             }
         }
         int currentlyBorrowedBookCount = currentlyBorrowedBookIds.size();
-        if (currentlyBorrowedBookCount + bookUUIDs.size() > getMaxBorrowingLimit()) {//todo check max book can borrow
-            throw new UnvalidBorrowRequestException("Member cannot borrow more than " + getMaxBorrowingLimit() + " books");
+        if (currentlyBorrowedBookCount + bookUUIDs.size() > getMaxBorrowingLimit()) {
+            throw new InvalidBorrowRequestException("Member cannot borrow more than " + getMaxBorrowingLimit() + " books");
         }
-
-
         Set<UUID> isRecentlyReturned = getRecentlyReturnedBookIds(CONTINUOUS_BORROW_WAITING_DAYS);
         for (UUID bookUUID : bookUUIDs) {
             if (isRecentlyReturned.contains(bookUUID)) {
-                throw new UnvalidBorrowRequestException("Member must wait for " + CONTINUOUS_BORROW_WAITING_DAYS + " days to borrow book: " + bookUUID + " again");
+                throw new InvalidBorrowRequestException("Member must wait for " + CONTINUOUS_BORROW_WAITING_DAYS + " days to borrow book: " + bookUUID + " again");
             }
         }
 
@@ -207,27 +241,48 @@ public class Member extends AbstractAggregateRoot<Member> {
         return recentlyReturnedBookIds;
     }
 
-    private Set<UUID> getCurrentlyBorrowedBookIds() {
+    public Set<UUID> getCurrentlyBorrowedBookIds() {
         Set<UUID> currentlyBorrowedBookIds = new HashSet<>();
         for (Borrow borrow : borrows) {
-            if (borrow.getStatus() != BorrowStatus.COMPLETED) {
-                for (BorrowItem item : borrow.getBorrowItems()) {
-                    if (!item.isReturned()) {
-                        currentlyBorrowedBookIds.add(item.getBookId());
-                    }
-                }
-            }
+            currentlyBorrowedBookIds.addAll(borrow.getCurrentlyBorrowedBookIds());
         }
         return currentlyBorrowedBookIds;
     }
 
-    private boolean hasDuplicateBook(List<UUID> bookUUIDs) {
-        Set<UUID> uniqueBookIds = new HashSet<>();
-        for (UUID bookUUID : bookUUIDs) {
-            if (!uniqueBookIds.add(bookUUID)) {
-                return true;
+
+
+    public UUID markAsReadyReservationContains(Reservation reservation) {
+        reservation.markAsReady();
+        registerEvent(new ReservationReadyEvent(reservation));
+        return reservation.getReservationId();
+    }
+
+
+    public boolean hasReadyReservationOn(Set<UUID> bookIds) {
+        return reservations.stream()
+                .filter(reservation -> reservation.getStatus() == ReservationStatus.READY_FOR_PICKUP)
+                .map(Reservation::getBookId)
+                .anyMatch(bookIds::contains);
+    }
+
+
+
+    public int checkAndExpireReservations() {
+        int expiredCount = 0;
+        for (Reservation reservation : reservations) {
+            if (reservation.markAsExpiredIfNeeded()) {
+                expiredCount++;
+                registerEvent(new ReservationExpiredEvent(memberId, reservation.getBookId()));
             }
         }
-        return false;
+        return expiredCount;
+    }
+
+    public Borrow completeReservation(Reservation reservation, Integer bookPrice) {
+        reservation.complete();
+        Borrow borrow = Borrow.create(this, Collections.singletonMap(reservation.getBookId(), bookPrice));
+        this.borrows.add(borrow);
+        registerEvent(new MemberCompleteReservationEvent(reservation));
+        return borrow;
     }
 }

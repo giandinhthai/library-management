@@ -6,13 +6,12 @@ import com.example.authservice.jpa.entity.RefreshTokenJpaEntity;
 //TODO: lib for handle entity => DTO
 import java.lang.reflect.Constructor;
 import java.util.stream.Collectors;
+
 public class AuthUserMapper {
     public static AuthUser toDomain(AuthUserJpaEntity entity) {
         // Use the reconstitute method to create the domain object from persistence
-        AuthUser user = AuthUser.reconstitute(entity.getUserId(), entity.getEmail(), entity.getHashedPassword());
+        AuthUser user = AuthUser.reconstitute(entity.getUserId(), entity.getEmail(), entity.getHashedPassword(), entity.getRole());
 
-        // Add roles and tokens
-        entity.getRoles().forEach(user::assignRole);
         entity.getRefreshTokens().forEach(rt -> user.addRefreshToken(rt.toDomain()));
 
         // Set active status
@@ -26,7 +25,7 @@ public class AuthUserMapper {
         entity.setUserId(user.getUserId());
         entity.setEmail(user.getEmail());
         entity.setHashedPassword(user.getHashedPassword());
-        entity.setRoles(user.getRoles());
+        entity.setRole(user.getRole());
         entity.setRefreshTokens(
                 user.getRefreshTokens().stream()
                         .map(RefreshTokenJpaEntity::fromDomain)

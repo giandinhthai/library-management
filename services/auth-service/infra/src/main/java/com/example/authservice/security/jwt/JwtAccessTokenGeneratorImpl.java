@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtAccessTokenGeneratorImpl implements JwtAccessTokenGenerator {
@@ -24,13 +23,11 @@ public class JwtAccessTokenGeneratorImpl implements JwtAccessTokenGenerator {
     public String generate(AuthUser user) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + tokenValidityInSeconds * 1000);
-        String authorities = user.getRoles().stream()
-                .map(Enum::name)
-                .collect(Collectors.joining(","));
+        String authority = user.getRole().name();
 
         return Jwts.builder()
                 .setSubject(user.getUserId().toString())
-                .claim("auth", authorities)
+                .claim("auth", authority)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(getSigningKey())

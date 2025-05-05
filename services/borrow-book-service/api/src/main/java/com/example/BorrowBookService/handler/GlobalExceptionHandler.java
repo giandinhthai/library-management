@@ -3,11 +3,12 @@ package com.example.BorrowBookService.handler;
 
 import com.example.BorrowBookService.exception.NotFoundException;
 import com.example.BorrowBookService.exception.UnexpectedBorrowStateException;
-import com.example.BorrowBookService.exception.UnvalidBookStateException;
-import com.example.BorrowBookService.exception.UnvalidBorrowRequestException;
-import com.example.buildingblocks.shared.api.DTO.ApiResponse;
+import com.example.BorrowBookService.exception.InvalidBookStateException;
+import com.example.BorrowBookService.exception.InvalidBorrowRequestException;
+import com.example.buildingblocks.shared.api.DTO.RestApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         HashMap<Object, Object> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -30,54 +31,61 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("Validation failed",
-                        new ApiResponse.ErrorDetails("VALIDATION_ERROR", errors.toString())));
+                .body(RestApiResponse.error("Validation failed",
+                        new RestApiResponse.ErrorDetails("VALIDATION_ERROR", errors.toString())));
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiResponse<Void>> handleEmailAlreadyExistsException(NotFoundException ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleEmailAlreadyExistsException(NotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ApiResponse.error("Not found error",
-                        new ApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
+                .body(RestApiResponse.error("Not found error",
+                        new RestApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
     }
 
     @ExceptionHandler(UnexpectedBorrowStateException.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnexpectedBorrowStateException(UnexpectedBorrowStateException ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleUnexpectedBorrowStateException(UnexpectedBorrowStateException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ApiResponse.error("Unexpected borrow state error",
-                        new ApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
+                .body(RestApiResponse.error("Unexpected borrow state error",
+                        new RestApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
     }
-    @ExceptionHandler(UnvalidBookStateException.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnvalidBookStateException(UnvalidBookStateException ex) {
+    @ExceptionHandler(InvalidBookStateException.class)
+    public ResponseEntity<RestApiResponse<Void>> handleUnvalidBookStateException(InvalidBookStateException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ApiResponse.error("Unvalid book state error",
-                        new ApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
+                .body(RestApiResponse.error("Unvalid book state error",
+                        new RestApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
     }
 
-    @ExceptionHandler(UnvalidBorrowRequestException.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnvalidBorrowRequestException(UnvalidBorrowRequestException ex) {
+    @ExceptionHandler(InvalidBorrowRequestException.class)
+    public ResponseEntity<RestApiResponse<Void>> handleUnvalidBorrowRequestException(InvalidBorrowRequestException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ApiResponse.error("Unvalid borrow request error",
-                        new ApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
+                .body(RestApiResponse.error("Unvalid borrow request error",
+                        new RestApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("An unexpected error occurred",
-                        new ApiResponse.ErrorDetails("server error", ex.getMessage())));
+                .body(RestApiResponse.error("An unexpected error occurred",
+                        new RestApiResponse.ErrorDetails("server error", ex.getMessage())));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleGeneralException(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("An unexpected error occurred",
-                        new ApiResponse.ErrorDetails("SERVER_ERROR", ex.getMessage())));
+                .body(RestApiResponse.error("An unexpected error occurred",
+                        new RestApiResponse.ErrorDetails("SERVER_ERROR", ex.getMessage())));
+    }
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<RestApiResponse<Void>> handleBadCredentialsException(AuthenticationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(RestApiResponse.error("Bad credentials",
+                        new RestApiResponse.ErrorDetails("BAD_CREDENTIALS", ex.getMessage())));
     }
 }

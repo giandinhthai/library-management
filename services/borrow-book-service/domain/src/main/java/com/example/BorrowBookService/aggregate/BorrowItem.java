@@ -1,5 +1,6 @@
 package com.example.BorrowBookService.aggregate;
 
+import com.example.BorrowBookService.exception.InvalidReturnRequestException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ public class BorrowItem {
     private UUID borrowItemId;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "borrow_id", nullable = false)
     private Borrow borrow;
 
@@ -63,7 +64,7 @@ public class BorrowItem {
 
     private void markReturned() {
         if (returned) {
-            throw new IllegalStateException("Item already returned");
+            throw new InvalidReturnRequestException("Item already returned");
         }
         this.returnedAt = LocalDateTime.now();
         this.returned = true;

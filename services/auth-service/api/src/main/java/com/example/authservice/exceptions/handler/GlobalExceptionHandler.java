@@ -2,7 +2,7 @@ package com.example.authservice.exceptions.handler;
 
 
 import com.example.authservice.exceptions.EmailAlreadyExistsException;
-import com.example.buildingblocks.shared.api.DTO.ApiResponse;
+import com.example.buildingblocks.shared.api.DTO.RestApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         HashMap<Object, Object> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -27,31 +27,31 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("Validation failed",
-                        new ApiResponse.ErrorDetails("VALIDATION_ERROR", errors.toString())));
+                .body(RestApiResponse.error("Validation failed",
+                        new RestApiResponse.ErrorDetails("VALIDATION_ERROR", errors.toString())));
     }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<ApiResponse<Void>> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ApiResponse.error("Registration failed",
-                        new ApiResponse.ErrorDetails("EMAIL_EXISTS", ex.getMessage())));
+                .body(RestApiResponse.error("Registration failed",
+                        new RestApiResponse.ErrorDetails("EMAIL_EXISTS", ex.getMessage())));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("Invalid input",
-                        new ApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
+                .body(RestApiResponse.error("Invalid input",
+                        new RestApiResponse.ErrorDetails("INVALID_INPUT", ex.getMessage())));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception ex) {
+    public ResponseEntity<RestApiResponse<Void>> handleGeneralException(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("An unexpected error occurred",
-                        new ApiResponse.ErrorDetails("SERVER_ERROR", ex.getMessage())));
+                .body(RestApiResponse.error("An unexpected error occurred",
+                        new RestApiResponse.ErrorDetails("SERVER_ERROR", ex.getMessage())));
     }
 }

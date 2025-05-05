@@ -18,17 +18,14 @@ public class AuthUserJpaEntity {
     @Id
     @Column(name = "user_id", nullable = false)
     private UUID userId;
-
+    @Column(nullable = false,unique = true)
     private String email;
 
     private String hashedPassword;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "auth_user_roles", joinColumns = @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_auth_user_roles"), nullable = false),
-            foreignKey = @ForeignKey(name = "fk_auth_user_roles"))
-    @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    @Column(name = "role")
+    private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

@@ -1,6 +1,9 @@
 package com.example.BorrowBookService.jpa.repository.jpa;
 
 import com.example.BorrowBookService.aggregate.Borrow;
+import com.example.BorrowBookService.aggregate.BorrowStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,4 +14,11 @@ import java.util.UUID;
 
 @Repository
 public interface JpaBorrowRepository extends JpaRepository<Borrow, UUID> {
+    @Query("""
+    SELECT b
+    FROM Borrow b
+    WHERE b.member.memberId = :memberId
+    AND (:status IS NULL OR b.status = :status)
+    """)
+    Page<Borrow> getBorrowOnMember(@Param("memberId") UUID memberId, @Param("status") BorrowStatus status, Pageable pageable);
 }

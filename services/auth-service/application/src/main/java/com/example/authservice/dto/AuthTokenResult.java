@@ -1,20 +1,8 @@
 package com.example.authservice.dto;
 
 
-public class AuthTokenResult {
-    private final String accessToken;
-    private final String refreshToken;
+import lombok.Getter;
 
-    public AuthTokenResult(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-    }
+public record AuthTokenResult(String accessToken, String refreshToken) {
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
 }
