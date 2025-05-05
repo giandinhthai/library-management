@@ -2,39 +2,3 @@
 # Gradle files
 .gradle/
 build/
-
-# Gradle wrapper files
-gradle-wrapper.jar
-gradle-wrapper.properties
-
-# Compiled class files
-*.class
-
-# Log files
-*.log
-
-# Temporary files
-*.tmp
-
-# IDE specific files
-.idea/
-*.iml
-*.ipr
-*.iws
-
-# Operating system files
-.DS_Store
-Thumbs.db
-
-# Application specific files
-*.sql
-*.h2.db
-*.db
-
-# Java generated files
-**/build/generated/
-**/build/classes/
-**/build/tmp/
-
-# Other files to ignore
-*.jar
