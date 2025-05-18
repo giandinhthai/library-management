@@ -21,9 +21,9 @@ public interface JpaReservationRepository extends JpaRepository<Reservation, UUI
                 WHERE r.bookId = :bookId
                 AND r.status = 'PENDING'
                 order by r.reservedAt asc
-                limit 1
+                limit :limit
             """)
-    Reservation getNextReservationOnBook(@Param("bookId") UUID bookId);
+    List<Reservation> getNextReservationOnBook(@Param("bookId") UUID bookId,@Param("limit") int limit);
 
     @Query(value = """
             SELECT *

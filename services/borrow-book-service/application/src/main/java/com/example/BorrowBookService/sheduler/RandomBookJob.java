@@ -4,19 +4,14 @@ import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.aggregate.Member;
 import com.example.BorrowBookService.repository.BookRepository;
 import com.example.BorrowBookService.repository.MemberRepository;
-import com.example.BorrowBookService.usecase.command.BorrowBook;
-import com.example.BorrowBookService.usecase.command.ReserveBook;
-import com.example.BorrowBookService.usecase.command.ReturnBook;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component

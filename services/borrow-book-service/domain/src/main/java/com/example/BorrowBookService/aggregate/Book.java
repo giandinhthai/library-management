@@ -7,12 +7,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "books")
 @Getter
-public class Book extends AbstractAggregateRoot<Book> {
+public class Book extends AbstractAggregateRoot<Book> implements Serializable {
     @Id
     @Column(name = "book_id")
     private UUID bookId;
@@ -49,7 +50,17 @@ public class Book extends AbstractAggregateRoot<Book> {
             throw new InvalidBookStateException("Book is not active in the system");
         }
         this.quantity += quantity;
+        increaseAvailableQuantity(quantity);
+    }
+    public void increaseAvailableQuantity(int quantity) {
+        if (status != BookStatus.ACTIVE) {
+            throw new InvalidBookStateException("Book is not active in the system");
+        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be positive");
+        }
         this.availableQuantity += quantity;
+        registerEvent(new BookAvailableQuantityIncreasedEvent(bookId,quantity));
     }
 
     public static Book create( int price, int quantity) {
@@ -84,14 +95,18 @@ public class Book extends AbstractAggregateRoot<Book> {
         availableQuantity--;
         reservationQuantity++;
     }
-
+    public void cancelReservation() {
+        if (reservationQuantity <= 0) {
+            throw new InvalidBookStateException("No reserved books to cancel");
+        }
+        reservationQuantity--;
+        this.increaseAvailableQuantity(1);
+    }
     public void isReturned() {
         if (availableQuantity + reservationQuantity >= quantity) {
             throw new InvalidBookStateException("Cannot return more books than total quantity");
         }
-        availableQuantity++;
-        registerEvent(new BookAvailableQuantityIncreasedEvent(bookId));
-
+        this.increaseAvailableQuantity(1);
     }
     private void validateAvailableRequest() {
         if (!hasAvailableCopies()) {

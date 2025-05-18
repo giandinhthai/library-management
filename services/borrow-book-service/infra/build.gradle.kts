@@ -1,5 +1,6 @@
 plugins {
     java
+    `java-library`
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
 }
@@ -12,11 +13,10 @@ dependencies {
     // TODO: Add your dependencies
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.4")
     implementation("org.springframework.retry:spring-retry:2.0.11")
-
     implementation(project(":services:borrow-book-service:domain"))
     implementation(project(":services:borrow-book-service:application"))
     implementation("org.postgresql:postgresql:42.7.5")
-
+    implementation(project(":building-blocks:caching"))
     compileOnly("org.projectlombok:lombok:1.18.38")
     annotationProcessor("org.projectlombok:lombok:1.18.38")
 

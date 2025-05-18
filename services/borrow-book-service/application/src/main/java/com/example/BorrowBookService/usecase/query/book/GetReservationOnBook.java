@@ -1,4 +1,5 @@
-package com.example.BorrowBookService.usecase.query;
+package com.example.BorrowBookService.usecase.query.book;
+
 
 import com.example.BorrowBookService.DTO.reverse.ReserveResult;
 import com.example.BorrowBookService.DTO.reverse.mapper.ReserveMapper;
@@ -9,41 +10,38 @@ import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Query;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
-@Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class GetMemberReservations implements Query<List<ReserveResult>> {
-    private UUID memberId;
+@Getter
+public class GetReservationOnBook implements Query<Page<ReserveResult>> {
+    private UUID bookId;
     private ReservationStatus status;
+    private Pageable pageable;
 }
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-class GetMemberReservationsHandler implements RequestHandler<GetMemberReservations, List<ReserveResult>> {
+class GetReservationOnBookHandler implements RequestHandler<GetReservationOnBook, Page<ReserveResult>> {
     private final ReservationReadOnlyRepository reservationReadOnlyRepository;
     private final ReserveMapper reserveMapper;
 
     @Override
-    @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN') or " +
-            "hasRole('MEMBER') and authentication.principal.equals(#query.memberId)")
-    public List<ReserveResult> handle(@Param("query") GetMemberReservations query) {
-        List<Reservation> reservations = reservationReadOnlyRepository.getAllReservation(
-                query.getMemberId(),
-                query.getStatus()
+    @PreAuthorize("hasAnyRole('LIBRARIAN','ADMIN')")
+    public Page<ReserveResult> handle(GetReservationOnBook request) {
+        Page<Reservation> reservations = reservationReadOnlyRepository.getReservationByBook(
+                request.getBookId(),
+                request.getStatus(),
+                request.getPageable()
         );
-        return reservations.stream()
-                .map(reserveMapper::toResult)
-                .toList();
+        return reservations.map(reserveMapper::toResult);
     }
 }

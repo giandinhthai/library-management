@@ -1,8 +1,7 @@
-package com.example.BorrowBookService.usecase.query;
+package com.example.BorrowBookService.usecase.query.member;
 
 import com.example.BorrowBookService.DTO.borrow.BorrowResult;
 import com.example.BorrowBookService.DTO.borrow.mapper.BorrowMapper;
-import com.example.BorrowBookService.DTO.reverse.mapper.ReserveMapper;
 import com.example.BorrowBookService.aggregate.Borrow;
 import com.example.BorrowBookService.aggregate.BorrowStatus;
 import com.example.BorrowBookService.repository.BorrowReadOnlyRepository;
@@ -16,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Getter

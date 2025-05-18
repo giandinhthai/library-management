@@ -1,6 +1,6 @@
 package com.example.BorrowBookService.eventHandler.integration_events;
 
-import com.example.BorrowBookService.usecase.command.CreateUser;
+import com.example.BorrowBookService.usecase.command.member.CreateUser;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import com.example.buildingblocks.shared.intergation_event.UserRegisteredIntegrationEvent;
 import lombok.RequiredArgsConstructor;

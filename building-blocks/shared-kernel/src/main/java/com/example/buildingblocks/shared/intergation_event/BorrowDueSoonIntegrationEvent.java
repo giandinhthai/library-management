@@ -3,28 +3,25 @@ package com.example.buildingblocks.shared.intergation_event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegisteredIntegrationEvent implements IntegrationEvent {
-    UUID userId;
-    String email;
-    String role;
-    Instant occurredAt;
-
+public class BorrowDueSoonIntegrationEvent implements IntegrationEvent {
+    UUID memberId;
+    UUID borrowId;
+    Instant occurredAt=Instant.now();;
     @Override
     public String getEventName() {
-        return "user.registered";
-    }
-    @Override
-    public Instant getOccurredAt() {
-        return occurredAt;
+        return "borrow.due";
     }
     @Override
     public String getAggregateId() {
-        return userId.toString();
+        return memberId.toString();
     }
+
+
 }

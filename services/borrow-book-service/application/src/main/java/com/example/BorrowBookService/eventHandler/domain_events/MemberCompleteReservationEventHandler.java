@@ -1,7 +1,7 @@
 package com.example.BorrowBookService.eventHandler.domain_events;
 
 import com.example.BorrowBookService.event.MemberCompleteReservationEvent;
-import com.example.BorrowBookService.usecase.command.CompleteBookReservation;
+import com.example.BorrowBookService.usecase.command.book.CompleteBookReservation;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

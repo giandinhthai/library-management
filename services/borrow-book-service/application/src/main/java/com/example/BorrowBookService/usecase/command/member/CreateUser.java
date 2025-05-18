@@ -1,6 +1,5 @@
-package com.example.BorrowBookService.usecase.command;
+package com.example.BorrowBookService.usecase.command.member;
 
-import com.example.BorrowBookService.DTO.borrow.BorrowResult;
 import com.example.BorrowBookService.aggregate.Member;
 import com.example.BorrowBookService.repository.MemberRepository;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Getter

@@ -1,7 +1,7 @@
 package com.example.BorrowBookService.eventHandler.domain_events;
 
 import com.example.BorrowBookService.event.ReservationExpiredEvent;
-import com.example.BorrowBookService.usecase.command.UpdateNextPendingReservationOnBook;
+import com.example.BorrowBookService.usecase.command.book.UpdateBookStatusOnExpiredReservation;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ public class ReservationExpiredEventHandler {
     @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 2000))
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onReservationExpiredEvent(ReservationExpiredEvent event) {
-        mediator.send(new UpdateNextPendingReservationOnBook(event.getBookId()));
+        mediator.send(new UpdateBookStatusOnExpiredReservation(event.getBookId()));
+//        mediator.send(new UpdateNextPendingReservationOnBook(event.getBookId()));
     }
 }

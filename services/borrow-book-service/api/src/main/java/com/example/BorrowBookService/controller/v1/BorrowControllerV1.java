@@ -2,9 +2,9 @@ package com.example.BorrowBookService.controller.v1;
 
 import com.example.BorrowBookService.DTO.borrow.BorrowResult;
 import com.example.BorrowBookService.aggregate.BorrowStatus;
-import com.example.BorrowBookService.usecase.command.BorrowBook;
-import com.example.BorrowBookService.usecase.command.ReturnBook;
-import com.example.BorrowBookService.usecase.query.GetMemberBorrows;
+import com.example.BorrowBookService.usecase.command.member.BorrowBook;
+import com.example.BorrowBookService.usecase.command.member.ReturnBook;
+import com.example.BorrowBookService.usecase.query.member.GetMemberBorrows;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import com.example.buildingblocks.shared.api.DTO.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

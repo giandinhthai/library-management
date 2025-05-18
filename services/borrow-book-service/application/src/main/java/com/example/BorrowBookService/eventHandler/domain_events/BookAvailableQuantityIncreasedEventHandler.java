@@ -1,11 +1,7 @@
 package com.example.BorrowBookService.eventHandler.domain_events;
 
-import com.example.BorrowBookService.aggregate.Member;
-import com.example.BorrowBookService.aggregate.Reservation;
 import com.example.BorrowBookService.event.BookAvailableQuantityIncreasedEvent;
-import com.example.BorrowBookService.repository.MemberRepository;
-import com.example.BorrowBookService.repository.ReservationReadOnlyRepository;
-import com.example.BorrowBookService.usecase.command.UpdateNextPendingReservationOnBook;
+import com.example.BorrowBookService.usecase.command.member.UpdateNextPendingReservationOnBook;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +21,7 @@ public class BookAvailableQuantityIncreasedEventHandler {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 2000))
-    public void updateNextPendingReservationStatusOnBookReturnedEvent(BookAvailableQuantityIncreasedEvent bookAvailableQuantityIncreasedEvent) {
-        log.info("Member reservation status updated");
-        var reservationId = mediator.send(new UpdateNextPendingReservationOnBook(bookAvailableQuantityIncreasedEvent.getBookId()));
-        if (reservationId == null) {
-            return;
-        }
-        log.info("Reservation id: {} has update to ready for pickup", reservationId);
+    public void updateNextPendingReservationStatusOnBookReturnedEvent(BookAvailableQuantityIncreasedEvent bookEvent) {
+        mediator.send(new UpdateNextPendingReservationOnBook(bookEvent.getBookId(), bookEvent.getQuantity()));
     }
 }

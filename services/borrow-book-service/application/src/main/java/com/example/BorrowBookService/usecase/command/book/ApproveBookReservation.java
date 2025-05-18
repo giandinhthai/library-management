@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.usecase.command;
+package com.example.BorrowBookService.usecase.command.book;
 
 import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.repository.BookRepository;

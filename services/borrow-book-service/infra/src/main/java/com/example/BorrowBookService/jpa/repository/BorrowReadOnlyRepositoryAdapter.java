@@ -19,4 +19,9 @@ public class BorrowReadOnlyRepositoryAdapter implements BorrowReadOnlyRepository
     public Page<Borrow> getBorrowOnMember(UUID memberId, BorrowStatus status, Pageable pageable) {
         return jpaBorrowRepository.getBorrowOnMember(memberId,status, pageable);
     }
+
+    @Override
+    public List<Borrow> findNearlyDueBorrowers(int noticePeriodInDays) {
+        return jpaBorrowRepository.findNearlyDueBorrowers(noticePeriodInDays);
+    }
 }

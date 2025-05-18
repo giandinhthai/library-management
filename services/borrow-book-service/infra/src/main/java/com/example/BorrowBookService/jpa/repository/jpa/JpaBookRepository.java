@@ -48,11 +48,11 @@ public interface JpaBookRepository extends JpaRepository<Book, UUID> {
         """, nativeQuery = true)
     Integer getPrice(@Param("bookId") UUID bookId);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT b FROM Book b WHERE b.bookId = :id")
+
+    @Query(value = "SELECT * FROM books WHERE book_id = :id FOR UPDATE", nativeQuery = true)
     Optional<Book> findByIdForUpdate(@Param("id") UUID id);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT b FROM Book b WHERE b.bookId IN :ids")
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query(value = "SELECT * FROM books b WHERE book_id IN :ids FOR UPDATE",nativeQuery = true)
     List<Book> findAllByIdForUpdate(@Param("ids") List<UUID> ids);
 }

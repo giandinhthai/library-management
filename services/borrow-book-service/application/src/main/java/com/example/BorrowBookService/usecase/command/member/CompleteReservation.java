@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.usecase.command;
+package com.example.BorrowBookService.usecase.command.member;
 
 
 import com.example.BorrowBookService.DTO.borrow.BorrowResult;

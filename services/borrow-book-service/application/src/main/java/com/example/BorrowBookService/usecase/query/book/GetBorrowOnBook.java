@@ -1,13 +1,9 @@
-package com.example.BorrowBookService.usecase.query;
+package com.example.BorrowBookService.usecase.query.book;
 
 import com.example.BorrowBookService.DTO.borrow.BorrowItemOnBook;
-import com.example.BorrowBookService.DTO.borrow.BorrowResult;
 import com.example.BorrowBookService.DTO.borrow.mapper.BorrowMapper;
-import com.example.BorrowBookService.aggregate.Borrow;
 import com.example.BorrowBookService.aggregate.BorrowItem;
-import com.example.BorrowBookService.aggregate.BorrowStatus;
 import com.example.BorrowBookService.repository.BorrowItemReadOnlyRepository;
-import com.example.BorrowBookService.repository.BorrowReadOnlyRepository;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
 import com.example.buildingblocks.cqrs.request.Query;
 import lombok.AllArgsConstructor;

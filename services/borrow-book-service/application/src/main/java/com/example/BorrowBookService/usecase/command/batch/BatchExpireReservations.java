@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.usecase.command;
+package com.example.BorrowBookService.usecase.command.batch;
 
 import com.example.BorrowBookService.repository.MemberRepository;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;

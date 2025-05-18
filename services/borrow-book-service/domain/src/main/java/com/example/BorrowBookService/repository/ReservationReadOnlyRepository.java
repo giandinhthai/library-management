@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface ReservationReadOnlyRepository {
 
-    Reservation getNextReservationOnBook(UUID bookId);
+    List<Reservation> getNextReservationOnBook(UUID bookId,int limit);
     Set<Reservation> getNextReservationsOnBooks(Set<UUID> bookIds);
 
     Reservation getReadyReservation(UUID memberId, UUID bookId);

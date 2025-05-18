@@ -21,8 +21,8 @@ public class ReservationReadOnlyRepositoryAdapter implements ReservationReadOnly
     private final JpaReservationRepository jpaReservationRepository;
 
     @Override
-    public Reservation getNextReservationOnBook(UUID bookId) {
-        return jpaReservationRepository.getNextReservationOnBook(bookId);
+    public List<Reservation> getNextReservationOnBook(UUID bookId,int limit) {
+        return jpaReservationRepository.getNextReservationOnBook(bookId, limit);
     }
 
     @Override

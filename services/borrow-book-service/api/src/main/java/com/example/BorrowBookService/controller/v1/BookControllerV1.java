@@ -4,9 +4,10 @@ import com.example.BorrowBookService.DTO.book.BookResult;
 import com.example.BorrowBookService.DTO.borrow.BorrowItemOnBook;
 import com.example.BorrowBookService.DTO.reverse.ReserveResult;
 import com.example.BorrowBookService.aggregate.ReservationStatus;
-import com.example.BorrowBookService.usecase.query.GetBook;
-import com.example.BorrowBookService.usecase.query.GetBorrowOnBook;
-import com.example.BorrowBookService.usecase.query.GetReservationOnBook;
+import com.example.BorrowBookService.usecase.command.book.GetBooks;
+import com.example.BorrowBookService.usecase.query.book.GetBook;
+import com.example.BorrowBookService.usecase.query.book.GetBorrowOnBook;
+import com.example.BorrowBookService.usecase.query.book.GetReservationOnBook;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import com.example.buildingblocks.shared.api.DTO.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -54,6 +56,14 @@ public class BookControllerV1 {
             Pageable pageable) {
         var query = new GetReservationOnBook(bookId, status, pageable);
         Page<ReserveResult> results = mediator.send(query);
+        return ResponseEntity.ok(RestApiResponse.success(results));
+    }
+    @Operation(summary = "Get multiple books by IDs")
+    @GetMapping
+    public ResponseEntity<RestApiResponse<List<BookResult>>> getBooks(
+            @RequestParam List<UUID> bookIds) {
+        var query = new GetBooks(bookIds);
+        List<BookResult> results = mediator.send(query);
         return ResponseEntity.ok(RestApiResponse.success(results));
     }
 }

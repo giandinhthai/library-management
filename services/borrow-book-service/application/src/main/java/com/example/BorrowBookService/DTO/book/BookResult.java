@@ -9,6 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class BookResult {
+
     private UUID bookId;
 
     private int price;
