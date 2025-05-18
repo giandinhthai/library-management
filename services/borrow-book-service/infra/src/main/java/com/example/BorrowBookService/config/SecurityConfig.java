@@ -29,7 +29,7 @@ public class SecurityConfig  {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/books/{bookId}").permitAll()
+                        .requestMatchers("/api/books/{bookId}","/api/books").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

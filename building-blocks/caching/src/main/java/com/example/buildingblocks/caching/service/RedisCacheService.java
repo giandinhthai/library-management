@@ -59,14 +59,18 @@ public class RedisCacheService implements CacheService {
                 .toList();
 
         List<T> values = (List<T>) redisTemplate.opsForValue().multiGet(formattedKeys);
-        if (values == null) return null;
+        if (values == null) return Collections.emptyMap();
 
         Map<String, T> result = new HashMap<>();
         Iterator<String> keyIter = keys.iterator();
         Iterator<T> valueIter = values.iterator();
 
         while (keyIter.hasNext() && valueIter.hasNext()) {
-            result.put(keyIter.next(), valueIter.next());
+            String key = keyIter.next();
+            T value = valueIter.next();
+            if (value != null) {
+                result.put(key, value);
+            }
         }
         return result;
     }

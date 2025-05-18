@@ -21,6 +21,6 @@ public class ReturnReminderRunner implements CommandLineRunner {
     @Transactional
     public void run(String... args) {
 
-        returnReminderScheduler.sendScheduledReminders();
+//        returnReminderScheduler.sendScheduledReminders();
     }
 }
