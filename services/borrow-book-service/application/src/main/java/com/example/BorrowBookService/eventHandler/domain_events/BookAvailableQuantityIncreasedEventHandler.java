@@ -25,12 +25,7 @@ public class BookAvailableQuantityIncreasedEventHandler {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Retryable(retryFor = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 2000))
-    public void updateNextPendingReservationStatusOnBookReturnedEvent(BookAvailableQuantityIncreasedEvent bookAvailableQuantityIncreasedEvent) {
-        log.info("Member reservation status updated");
-        var reservationId = mediator.send(new UpdateNextPendingReservationOnBook(bookAvailableQuantityIncreasedEvent.getBookId()));
-        if (reservationId == null) {
-            return;
-        }
-        log.info("Reservation id: {} has update to ready for pickup", reservationId);
+    public void updateNextPendingReservationStatusOnBookReturnedEvent(BookAvailableQuantityIncreasedEvent bookEvent) {
+        mediator.send(new UpdateNextPendingReservationOnBook(bookEvent.getBookId(), bookEvent.getQuantity()));
     }
 }

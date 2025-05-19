@@ -23,4 +23,8 @@ public class UserRegisteredIntegrationEvent implements IntegrationEvent {
     public Instant getOccurredAt() {
         return occurredAt;
     }
+    @Override
+    public String getAggregateId() {
+        return userId.toString();
+    }
 }

@@ -15,7 +15,7 @@ dependencies {
     implementation(project(":building-blocks:cqrs"))
     implementation(project(":building-blocks:shared-kernel"))
     implementation(project(":building-blocks:event-bus"))
-
+    api(project(":building-blocks:caching"))
     implementation(project(":services:borrow-book-service:domain"))
 //    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.4") //aggreagte root
     implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")

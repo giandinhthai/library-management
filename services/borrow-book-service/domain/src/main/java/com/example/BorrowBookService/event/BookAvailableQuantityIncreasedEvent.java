@@ -11,10 +11,13 @@ import java.util.UUID;
 @Getter
 public class BookAvailableQuantityIncreasedEvent {
     private final UUID bookId;
+    private final int quantity;
     private final Instant occurredAt;
 
-    public BookAvailableQuantityIncreasedEvent(UUID bookId) {
+    public BookAvailableQuantityIncreasedEvent(UUID bookId, int quantity) {
+
         this.bookId = bookId;
+        this.quantity = quantity;
         this.occurredAt = Instant.now();
     }
 

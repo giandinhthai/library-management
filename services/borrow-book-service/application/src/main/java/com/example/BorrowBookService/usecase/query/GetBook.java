@@ -20,12 +20,14 @@ import java.util.UUID;
 public class GetBook implements Query<BookResult> {
     private UUID bookId;
 }
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-class GetBookHandler implements RequestHandler<GetBook,BookResult>{
+class GetBookHandler implements RequestHandler<GetBook, BookResult> {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+
     @Override
     public BookResult handle(GetBook request) {
         return bookMapper.toResult(bookRepository.findByIdOrThrow(request.getBookId()));

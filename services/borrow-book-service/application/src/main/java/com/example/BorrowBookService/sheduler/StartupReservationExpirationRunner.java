@@ -30,5 +30,6 @@ public class StartupReservationExpirationRunner implements CommandLineRunner {
         // Set the SecurityContext
         SecurityContextHolder.getContext().setAuthentication(authentication);
         expirationScheduler.expireReservations();
+        SecurityContextHolder.clearContext();
     }
 }

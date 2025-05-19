@@ -5,4 +5,5 @@ import java.time.Instant;
 public interface IntegrationEvent {
     String getEventName();
     Instant getOccurredAt();
+    public String getAggregateId();
 }
