@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.usecase.query;
+package com.example.BorrowBookService.usecase.query.book;
 
 import com.example.BorrowBookService.DTO.book.BookResult;
 import com.example.BorrowBookService.DTO.book.mapper.BookMapper;

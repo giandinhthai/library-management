@@ -1,7 +1,6 @@
 package com.example.BorrowBookService.sheduler;
 
-import com.example.BorrowBookService.repository.BorrowReadOnlyRepository;
-import com.example.BorrowBookService.usecase.command.BatchNotifyDueSoonBorrowers;
+import com.example.BorrowBookService.usecase.command.batch.BatchNotifyDueSoonBorrowers;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.Collections;
 
 @Component

@@ -1,7 +1,6 @@
 package com.example.BorrowBookService.sheduler;
 
-import com.example.BorrowBookService.repository.MemberRepository;
-import com.example.BorrowBookService.usecase.command.BatchExpireReservations;
+import com.example.BorrowBookService.usecase.command.batch.BatchExpireReservations;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

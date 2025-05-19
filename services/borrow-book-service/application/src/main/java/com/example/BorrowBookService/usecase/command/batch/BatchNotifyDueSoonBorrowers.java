@@ -1,7 +1,5 @@
-package com.example.BorrowBookService.usecase.command;
+package com.example.BorrowBookService.usecase.command.batch;
 
-import com.example.BorrowBookService.aggregate.Borrow;
-import com.example.BorrowBookService.aggregate.Member;
 import com.example.BorrowBookService.repository.BorrowReadOnlyRepository;
 import com.example.BorrowBookService.repository.MemberRepository;
 import com.example.buildingblocks.cqrs.handler.RequestHandler;
@@ -16,9 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class BatchNotifyDueSoonBorrowers implements Command<Void> {

@@ -1,7 +1,7 @@
 package com.example.BorrowBookService.eventHandler.domain_events;
 
 import com.example.BorrowBookService.event.MemberBorrowBooksEvent;
-import com.example.BorrowBookService.usecase.command.UpdateBooksStatusOnBorrow;
+import com.example.BorrowBookService.usecase.command.book.UpdateBooksStatusOnBorrow;
 import com.example.buildingblocks.cqrs.mediator.Mediator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

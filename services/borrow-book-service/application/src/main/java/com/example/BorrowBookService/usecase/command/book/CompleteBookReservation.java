@@ -1,4 +1,4 @@
-package com.example.BorrowBookService.usecase.command;
+package com.example.BorrowBookService.usecase.command.book;
 
 import com.example.BorrowBookService.aggregate.Book;
 import com.example.BorrowBookService.repository.BookRepository;
@@ -15,23 +15,21 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateBookStatusOnExpiredReservation implements Command<UUID> {
+public class CompleteBookReservation implements Command<UUID> {
     private UUID bookId;
 }
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class UpdateBookStatusOnExpiredReservationHandler
-        implements RequestHandler<UpdateBookStatusOnExpiredReservation, UUID> {
-
+class CompleteBookReservationHandler implements RequestHandler<CompleteBookReservation, UUID> {
     private final BookRepository bookRepository;
 
     @Override
     @Transactional
-    public UUID handle(UpdateBookStatusOnExpiredReservation command) {
+    public UUID handle(CompleteBookReservation command) {
         Book book = bookRepository.findByIdForUpdateOrThrow(command.getBookId());
-        book.cancelReservation();
+        book.completeReservation();
         bookRepository.save(book);
         return book.getBookId();
     }
